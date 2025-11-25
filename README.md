@@ -1,19 +1,33 @@
-# Proyecto Desarrollo Web
+# Salon Appointment System
 
 ## 📋 Descripción
-Creación de repositorio para proyecto de desarrollo web con .NET
+Sistema de gestión de citas para peluquerías desarrollado como proyecto académico para la Universidad de Almería.
 
-## 👨‍💻 Autor
-**Johan Eduardo Cala Torra**
+## 👥 Autores
+- **Johan Eduardo Cala Torra** - [JohanCalaT](https://github.com/JohanCalaT)
+- **jct576** - [jct576](https://github.com/jct576)
 
 ## 🚀 Tecnologías
 - .NET
+- C#
 
 ## 📅 Fecha de Creación
 25 de Noviembre de 2025
 
-## 📝 Notas
-Proyecto académico - Universidad de Almería
+## 📝 Contribuir
+Este proyecto utiliza **co-autoría en commits** para mantener registro en ambos perfiles de GitHub.
+
+**⚠️ IMPORTANTE:** Todos los commits deben incluir la línea de co-autoría.
+
+Ver [CONTRIBUTING.md](CONTRIBUTING.md) para instrucciones detalladas sobre cómo hacer commits correctamente.
+
+### Ejemplo rápido:
+```bash
+git commit -m "Tu mensaje" -m "" -m "Co-authored-by: jct576 <jct576@inlumine.ual.es>"
+```
+
+## 🏫 Institución
+Universidad de Almería (UAL)
 
 ---
 
