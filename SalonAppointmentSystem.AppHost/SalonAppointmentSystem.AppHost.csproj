@@ -1,0 +1,16 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.0.0">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>61a67f3e-b6f1-415a-9e9e-51d43594da97</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SalonAppointmentSystem.ApiService\SalonAppointmentSystem.ApiService.csproj" />
+    <ProjectReference Include="..\SalonAppointmentSystem.Web\SalonAppointmentSystem.Web.csproj" />
+  </ItemGroup>
+
+</Project>
