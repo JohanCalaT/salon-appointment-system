@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\3.Orchestrator\SalonAppointmentSystem.ServiceDefaults\SalonAppointmentSystem.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\0.Shared\SalonAppointmentSystem.Shared\SalonAppointmentSystem.Shared.csproj" />
   </ItemGroup>
 
 </Project>

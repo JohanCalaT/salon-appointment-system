@@ -16,10 +16,12 @@ Sistema de gestión de citas para peluquerías desarrollado como proyecto acadé
 
 ## 📁 Estructura del Proyecto
 
-El proyecto está organizado en tres carpetas principales:
+El proyecto está organizado en cuatro carpetas principales:
 
 ```
 📦 ProyectoDesarrolloWeb
+├── 📁 0.Shared/
+│   └── SalonAppointmentSystem.Shared          # Biblioteca compartida (DTOs, Enums, Models)
 ├── 📁 1.Backend/
 │   └── SalonAppointmentSystem.ApiService      # API REST del sistema
 ├── 📁 2.Frontend/
@@ -31,6 +33,11 @@ El proyecto está organizado en tres carpetas principales:
 
 ### Descripción de Componentes
 
+- **0.Shared**: Biblioteca de clases compartida entre Frontend y Backend
+  - `DTOs`: Data Transfer Objects para transferencia de datos
+  - `Enums`: Enumeraciones compartidas
+  - `Models`: Modelos de dominio compartidos
+  - `Constants`: Constantes utilizadas en toda la aplicación
 - **1.Backend**: Contiene la API REST que maneja la lógica de negocio y acceso a datos
 - **2.Frontend**: Aplicación web Blazor Server para la interfaz de usuario
 - **3.Orchestrator**:
