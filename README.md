@@ -8,8 +8,45 @@ Sistema de gestión de citas para peluquerías desarrollado como proyecto acadé
 - **jct576** - [jct576](https://github.com/jct576)
 
 ## 🚀 Tecnologías
-- .NET
+- .NET 10.0
 - C#
+- .NET Aspire (Orquestación de microservicios)
+- Blazor (Frontend)
+- ASP.NET Core Web API (Backend)
+
+## 📁 Estructura del Proyecto
+
+El proyecto está organizado en tres carpetas principales:
+
+```
+📦 ProyectoDesarrolloWeb
+├── 📁 1.Backend/
+│   └── SalonAppointmentSystem.ApiService      # API REST del sistema
+├── 📁 2.Frontend/
+│   └── SalonAppointmentSystem.Web             # Aplicación Blazor
+└── 📁 3.Orchestrator/
+    ├── SalonAppointmentSystem.AppHost         # Orquestador .NET Aspire
+    └── SalonAppointmentSystem.ServiceDefaults # Configuración compartida
+```
+
+### Descripción de Componentes
+
+- **1.Backend**: Contiene la API REST que maneja la lógica de negocio y acceso a datos
+- **2.Frontend**: Aplicación web Blazor Server para la interfaz de usuario
+- **3.Orchestrator**:
+  - `AppHost`: Orquestador de .NET Aspire que gestiona todos los servicios
+  - `ServiceDefaults`: Configuraciones compartidas (telemetría, health checks, service discovery)
+
+## 🏃‍♂️ Cómo Ejecutar
+
+Para ejecutar el proyecto completo:
+
+```bash
+cd 3.Orchestrator/SalonAppointmentSystem.AppHost
+dotnet run
+```
+
+Esto iniciará el dashboard de Aspire y todos los servicios configurados.
 
 ## 📅 Fecha de Creación
 25 de Noviembre de 2025

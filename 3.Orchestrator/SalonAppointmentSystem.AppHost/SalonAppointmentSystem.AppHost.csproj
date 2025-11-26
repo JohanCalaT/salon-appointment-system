@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SalonAppointmentSystem.ApiService\SalonAppointmentSystem.ApiService.csproj" />
-    <ProjectReference Include="..\SalonAppointmentSystem.Web\SalonAppointmentSystem.Web.csproj" />
+    <ProjectReference Include="..\..\1.Backend\SalonAppointmentSystem.ApiService\SalonAppointmentSystem.ApiService.csproj" />
+    <ProjectReference Include="..\..\2.Frontend\SalonAppointmentSystem.Web\SalonAppointmentSystem.Web.csproj" />
   </ItemGroup>
 
 </Project>

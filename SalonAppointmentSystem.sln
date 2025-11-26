@@ -2,13 +2,19 @@
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.0.0
 MinimumVisualStudioVersion = 17.8.0.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.AppHost", "SalonAppointmentSystem.AppHost\SalonAppointmentSystem.AppHost.csproj", "{1C94F733-D4A1-4685-96A3-68884AFAC72A}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.Backend", "1.Backend", "{F1A1B1C1-D1E1-F1A1-B1C1-D1E1F1A1B1C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.ServiceDefaults", "SalonAppointmentSystem.ServiceDefaults\SalonAppointmentSystem.ServiceDefaults.csproj", "{56760267-860F-42AF-9944-04923A8D20E4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Frontend", "2.Frontend", "{F2A2B2C2-D2E2-F2A2-B2C2-D2E2F2A2B2C2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.ApiService", "SalonAppointmentSystem.ApiService\SalonAppointmentSystem.ApiService.csproj", "{05A94AEF-C642-4CD8-B46A-D536DFD3B64B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3.Orchestrator", "3.Orchestrator", "{F3A3B3C3-D3E3-F3A3-B3C3-D3E3F3A3B3C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.Web", "SalonAppointmentSystem.Web\SalonAppointmentSystem.Web.csproj", "{6C342F35-05EB-4F8B-8199-AC5C04BB108B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.AppHost", "3.Orchestrator\SalonAppointmentSystem.AppHost\SalonAppointmentSystem.AppHost.csproj", "{1C94F733-D4A1-4685-96A3-68884AFAC72A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.ServiceDefaults", "3.Orchestrator\SalonAppointmentSystem.ServiceDefaults\SalonAppointmentSystem.ServiceDefaults.csproj", "{56760267-860F-42AF-9944-04923A8D20E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.ApiService", "1.Backend\SalonAppointmentSystem.ApiService\SalonAppointmentSystem.ApiService.csproj", "{05A94AEF-C642-4CD8-B46A-D536DFD3B64B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SalonAppointmentSystem.Web", "2.Frontend\SalonAppointmentSystem.Web\SalonAppointmentSystem.Web.csproj", "{6C342F35-05EB-4F8B-8199-AC5C04BB108B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +41,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{05A94AEF-C642-4CD8-B46A-D536DFD3B64B} = {F1A1B1C1-D1E1-F1A1-B1C1-D1E1F1A1B1C1}
+		{6C342F35-05EB-4F8B-8199-AC5C04BB108B} = {F2A2B2C2-D2E2-F2A2-B2C2-D2E2F2A2B2C2}
+		{1C94F733-D4A1-4685-96A3-68884AFAC72A} = {F3A3B3C3-D3E3-F3A3-B3C3-D3E3F3A3B3C3}
+		{56760267-860F-42AF-9944-04923A8D20E4} = {F3A3B3C3-D3E3-F3A3-B3C3-D3E3F3A3B3C3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6502CA10-0172-4063-99D7-37C3DACC473F}
