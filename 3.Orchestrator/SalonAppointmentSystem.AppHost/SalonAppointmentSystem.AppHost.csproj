@@ -13,4 +13,8 @@
     <ProjectReference Include="..\..\2.Frontend\SalonAppointmentSystem.Web\SalonAppointmentSystem.Web.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.MySql" Version="13.0.0" />
+  </ItemGroup>
+
 </Project>

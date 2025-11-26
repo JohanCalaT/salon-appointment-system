@@ -3,6 +3,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
+// Add MySQL database connection
+builder.AddMySqlDataSource("salondb");
+
 // Add services to the container.
 builder.Services.AddProblemDetails();
 
