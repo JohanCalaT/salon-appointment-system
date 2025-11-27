@@ -1,10 +1,11 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Configurar MySQL
-var mysql = builder.AddMySql("mysql")
-    .WithLifetime(ContainerLifetime.Persistent);
+// Configurar SQL Server con volumen persistente para datos
+var sqlServer = builder.AddSqlServer("sqlserver")
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithDataVolume("salonappointment-sqlserver-data");  // Volumen para persistir datos
 
-var salondb = mysql.AddDatabase("salondb");
+var salondb = sqlServer.AddDatabase("salondb");
 
 var apiService = builder.AddProject<Projects.SalonAppointmentSystem_ApiService>("apiservice")
     .WithHttpHealthCheck("/health")

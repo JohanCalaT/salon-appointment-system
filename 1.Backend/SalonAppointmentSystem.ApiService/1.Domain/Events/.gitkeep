@@ -1,0 +1,3 @@
+# This file ensures the folder is tracked by Git
+# Will contain Domain Events: ReservaCreatedEvent.cs, ReservaCanceladaEvent.cs, etc.
+

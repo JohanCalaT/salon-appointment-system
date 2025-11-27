@@ -1,0 +1,7 @@
+# This file ensures the folder is tracked by Git
+# Will contain MediatR Pipeline Behaviors:
+# - ValidationBehavior.cs
+# - LoggingBehavior.cs
+# - TransactionBehavior.cs
+# - PerformanceBehavior.cs
+

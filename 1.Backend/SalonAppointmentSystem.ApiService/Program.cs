@@ -1,10 +1,14 @@
+using SalonAppointmentSystem.ApiService.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
 
-// Add MySQL database connection
-builder.AddMySqlDataSource("salondb");
+// Add Infrastructure layer (DbContext with Pomelo MySQL, Identity, Repositories, etc.)
+// Nota: NO usamos AddMySqlDataSource porque Pomelo maneja su propia conexión
+// El connection string "salondb" es inyectado automáticamente por Aspire
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
@@ -12,7 +16,16 @@ builder.Services.AddProblemDetails();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// Add controllers (for future API endpoints)
+builder.Services.AddControllers();
+
 var app = builder.Build();
+
+// Initialize database (migrations + seeding)
+if (app.Environment.IsDevelopment())
+{
+    await app.Services.InitializeDatabaseAsync();
+}
 
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
@@ -22,29 +35,30 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-string[] summaries = ["Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"];
+// Use authentication & authorization
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.MapGet("/", () => "API service is running. Navigate to /weatherforecast to see sample data.");
+// Map controllers
+app.MapControllers();
 
-app.MapGet("/weatherforecast", () =>
+// Health check endpoint
+app.MapGet("/", () => new
 {
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    Status = "Running",
+    Service = "SalonAppointmentSystem API",
+    Version = "1.0.0",
+    Environment = app.Environment.EnvironmentName
+});
+
+// API info endpoint
+app.MapGet("/api/info", () => new
+{
+    Message = "Salon Appointment System API",
+    Documentation = "/openapi/v1.json",
+    Health = "/health"
+});
 
 app.MapDefaultEndpoints();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
