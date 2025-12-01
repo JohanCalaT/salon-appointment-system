@@ -64,16 +64,13 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 app.UseExceptionHandler();
 
-// Enable Swagger in development
-if (app.Environment.IsDevelopment())
+// Enable Swagger (siempre habilitado para facilitar pruebas)
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Salon API v1");
-        options.RoutePrefix = "swagger";
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Salon API v1");
+    options.RoutePrefix = string.Empty; // Swagger en la raíz "/"
+});
 
 // Use authentication & authorization
 app.UseAuthentication();
@@ -82,21 +79,14 @@ app.UseAuthorization();
 // Map controllers
 app.MapControllers();
 
-// Health check endpoint
-app.MapGet("/", () => new
-{
-    Status = "Running",
-    Service = "SalonAppointmentSystem API",
-    Version = "1.0.0",
-    Environment = app.Environment.EnvironmentName
-});
-
 // API info endpoint
 app.MapGet("/api/info", () => new
 {
     Message = "Salon Appointment System API",
-    Documentation = "/openapi/v1.json",
-    Health = "/health"
+    Version = "1.0.0",
+    Documentation = "/swagger",
+    Health = "/health",
+    Environment = app.Environment.EnvironmentName
 });
 
 app.MapDefaultEndpoints();
