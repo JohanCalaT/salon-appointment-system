@@ -1,5 +1,5 @@
 using SalonAppointmentSystem.ApiService.Domain.Entities;
-using SalonAppointmentSystem.ApiService.Domain.Enums;
+using SalonAppointmentSystem.Shared.Enums;
 
 namespace SalonAppointmentSystem.ApiService.Domain.Interfaces;
 

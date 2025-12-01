@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SalonAppointmentSystem.ApiService.Domain.Entities;
-using SalonAppointmentSystem.ApiService.Domain.Enums;
 using SalonAppointmentSystem.ApiService.Infrastructure.Identity;
 using SalonAppointmentSystem.ApiService.Infrastructure.Persistence;
+using SalonAppointmentSystem.Shared.Enums;
 
 namespace SalonAppointmentSystem.ApiService.Infrastructure.Seeders;
 

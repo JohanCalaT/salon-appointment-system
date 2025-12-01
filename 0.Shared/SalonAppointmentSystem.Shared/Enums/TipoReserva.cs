@@ -1,4 +1,4 @@
-namespace SalonAppointmentSystem.ApiService.Domain.Enums;
+namespace SalonAppointmentSystem.Shared.Enums;
 
 /// <summary>
 /// Tipos de reserva según cómo fue creada

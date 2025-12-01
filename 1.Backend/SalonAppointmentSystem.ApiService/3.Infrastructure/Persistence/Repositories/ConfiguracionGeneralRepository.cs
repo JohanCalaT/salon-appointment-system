@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SalonAppointmentSystem.ApiService.Domain.Entities;
-using SalonAppointmentSystem.ApiService.Domain.Enums;
 using SalonAppointmentSystem.ApiService.Domain.Interfaces;
+using SalonAppointmentSystem.Shared.Enums;
 
 namespace SalonAppointmentSystem.ApiService.Infrastructure.Persistence.Repositories;
 

@@ -22,6 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Reserva> Reservas => Set<Reserva>();
     public DbSet<ConfiguracionHorario> ConfiguracionHorarios => Set<ConfiguracionHorario>();
     public DbSet<ConfiguracionGeneral> ConfiguracionGeneral => Set<ConfiguracionGeneral>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

@@ -1,4 +1,4 @@
-namespace SalonAppointmentSystem.ApiService.Domain.Enums;
+namespace SalonAppointmentSystem.Shared.Enums;
 
 /// <summary>
 /// Estados posibles de una reserva

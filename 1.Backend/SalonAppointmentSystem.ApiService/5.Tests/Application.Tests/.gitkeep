@@ -1,6 +1,0 @@
-# This file ensures the folder is tracked by Git
-# Will contain unit tests for Application layer:
-# - Command Handler tests
-# - Query Handler tests
-# - Validator tests
-
