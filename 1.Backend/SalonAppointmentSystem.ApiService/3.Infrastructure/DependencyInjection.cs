@@ -16,6 +16,7 @@ using SalonAppointmentSystem.ApiService.Infrastructure.Persistence;
 using SalonAppointmentSystem.ApiService.Infrastructure.Persistence.Repositories;
 using SalonAppointmentSystem.ApiService.Infrastructure.Seeders;
 using SalonAppointmentSystem.ApiService.Infrastructure.Services;
+using SalonAppointmentSystem.ApiService.Presentation.Authorization;
 
 namespace SalonAppointmentSystem.ApiService.Infrastructure;
 
@@ -87,8 +88,12 @@ public static class DependencyInjection
         // Registrar Seeder
         services.AddScoped<DatabaseSeeder>();
 
-        // Registrar servicios de autenticación
+        // Registrar servicios de autenticación y usuarios
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
+
+        // Registrar AutoMapper
+        services.AddAutoMapper(typeof(Application.Mappings.UserMappingProfile).Assembly);
 
         // Configurar JWT Settings
         var jwtSettings = configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
@@ -120,8 +125,12 @@ public static class DependencyInjection
             };
         });
 
+        // Registrar handler de autorización por operaciones
+        services.AddOperationAuthorization();
+
         // Configurar políticas de autorización
         services.AddAuthorizationBuilder()
+            // Políticas basadas en roles
             .AddPolicy(AppPolicies.RequireAdmin, policy =>
                 policy.RequireRole(ApplicationRoles.Admin))
             .AddPolicy(AppPolicies.RequireBarbero, policy =>
@@ -131,7 +140,9 @@ public static class DependencyInjection
             .AddPolicy(AppPolicies.RequireAdminOrBarbero, policy =>
                 policy.RequireRole(ApplicationRoles.Admin, ApplicationRoles.Barbero))
             .AddPolicy(AppPolicies.RequireAuthenticated, policy =>
-                policy.RequireRole(ApplicationRoles.Admin, ApplicationRoles.Barbero, ApplicationRoles.Cliente));
+                policy.RequireRole(ApplicationRoles.Admin, ApplicationRoles.Barbero, ApplicationRoles.Cliente))
+            // Políticas basadas en operaciones
+            .AddOperationPolicies();
 
         return services;
     }

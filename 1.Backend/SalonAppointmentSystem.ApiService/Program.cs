@@ -1,3 +1,6 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using SalonAppointmentSystem.ApiService.Application.Validators.Users;
 using SalonAppointmentSystem.ApiService.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,10 +10,18 @@ builder.AddServiceDefaults();
 
 // Add Infrastructure layer (DbContext, Identity, JWT, Repositories, etc.)
 // El connection string "salondb" es inyectado automáticamente por Aspire
-builder.Services.AddInfrastructure(builder.Configuration);
+// En entorno de Testing, la configuración se hace en CustomWebApplicationFactory
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddInfrastructure(builder.Configuration);
+}
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+
+// Add FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUserValidator>();
 
 // Add controllers
 builder.Services.AddControllers();
@@ -92,3 +103,6 @@ app.MapGet("/api/info", () => new
 app.MapDefaultEndpoints();
 
 app.Run();
+
+// Clase parcial para que WebApplicationFactory pueda acceder al Program
+public partial class Program { }
