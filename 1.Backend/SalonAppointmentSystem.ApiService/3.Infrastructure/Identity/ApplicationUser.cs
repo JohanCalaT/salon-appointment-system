@@ -30,18 +30,15 @@ public class ApplicationUser : IdentityUser
     public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
 
     /// <summary>
-    /// ID de la estación asignada (solo para barberos)
-    /// </summary>
-    public int? EstacionId { get; set; }
-
-    /// <summary>
     /// URL de la foto de perfil del usuario
     /// </summary>
     public string? FotoUrl { get; set; }
 
     // Propiedades de navegación
+
     /// <summary>
-    /// Estación asignada al barbero (null para otros roles)
+    /// Estación donde trabaja este barbero (navegación inversa).
+    /// Se obtiene a través de Estacion.BarberoId = this.Id
     /// </summary>
     public virtual Estacion? Estacion { get; set; }
 

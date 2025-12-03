@@ -258,18 +258,31 @@ public class UserService : IUserService
         if (request.PuntosAcumulados.HasValue)
             user.PuntosAcumulados = request.PuntosAcumulados.Value;
 
-        // Manejar EstacionId (puede ser null explícito)
+        // Manejar asignación de estación (puede ser null para desasignar)
         if (request.EstacionIdSpecified)
         {
+            // Primero, desasignar de cualquier estación anterior
+            var estacionAnterior = await _context.Estaciones
+                .FirstOrDefaultAsync(e => e.BarberoId == userId, cancellationToken);
+
+            if (estacionAnterior != null)
+            {
+                estacionAnterior.BarberoId = null;
+            }
+
+            // Si se especifica nueva estación, asignar
             if (request.EstacionId.HasValue)
             {
-                var estacionExiste = await _unitOfWork.Estaciones.AnyAsync(e => e.Id == request.EstacionId.Value, cancellationToken);
-                if (!estacionExiste)
+                var nuevaEstacion = await _context.Estaciones
+                    .FirstOrDefaultAsync(e => e.Id == request.EstacionId.Value, cancellationToken);
+
+                if (nuevaEstacion == null)
                 {
                     return ApiResponse<UserDto>.Fail("La estación especificada no existe");
                 }
+
+                nuevaEstacion.BarberoId = userId;
             }
-            user.EstacionId = request.EstacionId;
         }
 
         // Cambiar rol si se especifica
@@ -423,7 +436,7 @@ public class UserService : IUserService
 
         if (filters.EstacionId.HasValue)
         {
-            query = query.Where(u => u.EstacionId == filters.EstacionId.Value);
+            query = query.Where(u => u.Estacion != null && u.Estacion.Id == filters.EstacionId.Value);
         }
 
         // Nota: El filtro por rol se aplica después del query porque requiere UserManager

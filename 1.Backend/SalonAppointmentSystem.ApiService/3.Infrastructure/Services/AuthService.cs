@@ -206,6 +206,9 @@ public class AuthService : IAuthService
         var refreshToken = await GenerateAndStoreRefreshTokenAsync(user.Id, ipAddress);
         var expiresAt = DateTime.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpirationMinutes);
 
+        // Obtener EstacionId desde la navegación (si tiene estación asignada)
+        var estacionId = user.Estacion?.Id;
+
         return AuthResponse.Ok(
             accessToken,
             refreshToken,
@@ -217,7 +220,7 @@ public class AuthService : IAuthService
                 NombreCompleto = user.NombreCompleto,
                 Rol = primaryRole,
                 PuntosAcumulados = user.PuntosAcumulados,
-                EstacionId = user.EstacionId
+                EstacionId = estacionId
             });
     }
 
@@ -240,9 +243,10 @@ public class AuthService : IAuthService
         };
 
         // Agregar EstacionId si el usuario es barbero y tiene estación asignada
-        if (user.EstacionId.HasValue)
+        var estacionId = user.Estacion?.Id;
+        if (estacionId.HasValue)
         {
-            claims.Add(new Claim(AppClaimTypes.EstacionId, user.EstacionId.Value.ToString()));
+            claims.Add(new Claim(AppClaimTypes.EstacionId, estacionId.Value.ToString()));
         }
 
         var token = new JwtSecurityToken(

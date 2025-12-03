@@ -32,14 +32,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
         // Aplicar todas las configuraciones de entidades desde el ensamblado actual
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        // Configurar la relación ApplicationUser -> Estacion
+        // Configurar ApplicationUser
         builder.Entity<ApplicationUser>(entity =>
         {
-            entity.HasOne(u => u.Estacion)
-                  .WithOne()
-                  .HasForeignKey<ApplicationUser>(u => u.EstacionId)
-                  .OnDelete(DeleteBehavior.SetNull);
-
             entity.Property(u => u.NombreCompleto)
                   .HasMaxLength(200)
                   .IsRequired();
@@ -48,7 +43,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                   .HasMaxLength(500);
 
             entity.HasIndex(u => u.Activo);
-            entity.HasIndex(u => u.EstacionId);
         });
     }
 

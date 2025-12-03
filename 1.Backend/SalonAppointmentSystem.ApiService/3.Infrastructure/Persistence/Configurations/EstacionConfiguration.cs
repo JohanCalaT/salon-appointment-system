@@ -47,6 +47,15 @@ public class EstacionConfiguration : IEntityTypeConfiguration<Estacion>
 
         builder.HasIndex(e => new { e.Activa, e.BarberoId });
 
+        // Relación Estacion -> ApplicationUser (Barbero)
+        // Un barbero está ASIGNADO a una estación (1:1)
+        // La FK está en Estacion.BarberoId
+        // La navegación inversa está en ApplicationUser.Estacion
+        builder.HasOne(e => e.Barbero)
+               .WithOne(u => u.Estacion)
+               .HasForeignKey<Estacion>(e => e.BarberoId)
+               .OnDelete(DeleteBehavior.SetNull);
+
         // Relación con Reservas
         builder.HasMany(e => e.Reservas)
                .WithOne(r => r.Estacion)
