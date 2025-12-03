@@ -146,9 +146,10 @@ El proyecto sigue los principios de **Clean Architecture** con una clara separac
 erDiagram
     ApplicationUser ||--o{ Reserva : tiene
     ApplicationUser ||--o| Estacion : asignado
-    Estacion ||--o{ Reserva : recibe
-    Servicio ||--o{ Reserva : incluye
     ApplicationUser ||--o{ RefreshToken : posee
+    Estacion ||--o{ Reserva : recibe
+    Estacion ||--o{ ConfiguracionHorario : tiene
+    Servicio ||--o{ Reserva : incluye
 
     ApplicationUser {
         string Id PK
@@ -161,9 +162,11 @@ erDiagram
     Estacion {
         int Id PK
         string Nombre
+        string Descripcion
         string BarberoId FK
         bool Activa
         int Orden
+        bool UsaHorarioGenerico
     }
 
     Servicio {
@@ -190,12 +193,22 @@ erDiagram
 
     ConfiguracionHorario {
         int Id PK
+        int EstacionId FK
         DayOfWeek DiaSemana
         TimeSpan HoraInicio
         TimeSpan HoraFin
+        TipoHorario Tipo
+        string Descripcion
         bool Activo
+        DateTime FechaVigenciaDesde
+        DateTime FechaVigenciaHasta
     }
 ```
+
+> **Nota sobre Horarios:**
+> - `EstacionId = NULL` → Horario global del negocio
+> - `EstacionId != NULL` → Horario personalizado de la estación
+> - `TipoHorario`: Regular (0), Especial (1), Bloqueado (2)
 
 ---
 
@@ -270,6 +283,41 @@ Al ejecutar el AppHost, tendrás acceso a:
 | POST | `/api/auth/refresh-token` | Renovar token de acceso |
 | POST | `/api/auth/logout` | Cerrar sesión |
 
+### Endpoints de Usuarios (Admin, Barbero)
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/users` | Listar usuarios paginado |
+| GET | `/api/users/{id}` | Obtener usuario por ID |
+| POST | `/api/users` | Crear usuario (Admin) |
+| PUT | `/api/users/{id}` | Actualizar usuario (Admin) |
+| DELETE | `/api/users/{id}` | Eliminar usuario (Admin) |
+
+### Endpoints de Estaciones (Admin, Barbero)
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/estaciones` | Listar estaciones paginado |
+| GET | `/api/estaciones/activas` | Listar estaciones activas (público) |
+| GET | `/api/estaciones/{id}` | Obtener estación por ID |
+| GET | `/api/estaciones/mi-estacion` | Mi estación (Barbero) |
+| POST | `/api/estaciones` | Crear estación (Admin) |
+| PUT | `/api/estaciones/{id}` | Actualizar estación (Admin) |
+| DELETE | `/api/estaciones/{id}` | Eliminar estación (Admin) |
+| POST | `/api/estaciones/{id}/asignar-barbero` | Asignar barbero (Admin) |
+
+### Endpoints de Horarios
+
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET | `/api/horarios/global` | Horario global (Admin) |
+| PUT | `/api/horarios/global` | Configurar horario global (Admin) |
+| GET | `/api/horarios/efectivo` | Horario efectivo (público) |
+| GET | `/api/horarios/estacion/{id}` | Horario de estación |
+| PUT | `/api/horarios/estacion/{id}` | Configurar horario estación |
+| POST | `/api/horarios/estacion/{id}/especial` | Crear horario especial |
+| POST | `/api/horarios/estacion/{id}/bloquear-dia` | Bloquear día |
+
 ### Ejemplo de Respuesta API
 
 ```json
@@ -298,7 +346,7 @@ Ejecutar con cobertura:
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-**Estado actual:** ✅ 19 tests pasando
+**Estado actual:** ✅ 141 tests pasando
 
 ---
 
@@ -309,8 +357,11 @@ dotnet test --collect:"XPlat Code Coverage"
 - [x] Sistema de autenticación JWT
 - [x] Estructura de Clean Architecture
 - [x] Proyecto de tests unitarios
+- [x] CRUD completo de Usuarios con autorización
+- [x] Gestión de Estaciones (CRUD completo)
+- [x] Sistema de Horarios (global, por estación, especiales)
 - [ ] CRUD completo de Reservas
-- [ ] Panel de administración
+- [ ] CRUD de Servicios
 - [ ] Interfaz de cliente para reservas
 - [ ] Sistema de notificaciones
 - [ ] Reportes y estadísticas

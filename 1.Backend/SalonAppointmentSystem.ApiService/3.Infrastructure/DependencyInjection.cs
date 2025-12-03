@@ -92,6 +92,10 @@ public static class DependencyInjection
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserService, UserService>();
 
+        // Registrar servicios de estaciones y horarios
+        services.AddScoped<IEstacionService, EstacionService>();
+        services.AddScoped<IHorarioService, HorarioService>();
+
         // Registrar AutoMapper
         services.AddAutoMapper(typeof(Application.Mappings.UserMappingProfile).Assembly);
 

@@ -22,6 +22,9 @@ public class EstacionConfiguration : IEntityTypeConfiguration<Estacion>
                .HasMaxLength(100)
                .IsRequired();
 
+        builder.Property(e => e.Descripcion)
+               .HasMaxLength(500);
+
         builder.Property(e => e.BarberoId)
                .HasMaxLength(450); // Longitud estándar para Identity User Id
 
@@ -31,6 +34,9 @@ public class EstacionConfiguration : IEntityTypeConfiguration<Estacion>
         builder.Property(e => e.Orden)
                .HasDefaultValue(0);
 
+        builder.Property(e => e.UsaHorarioGenerico)
+               .HasDefaultValue(true);
+
         // Índices
         builder.HasIndex(e => e.Nombre)
                .IsUnique();
@@ -39,11 +45,20 @@ public class EstacionConfiguration : IEntityTypeConfiguration<Estacion>
 
         builder.HasIndex(e => e.Activa);
 
+        builder.HasIndex(e => new { e.Activa, e.BarberoId });
+
         // Relación con Reservas
         builder.HasMany(e => e.Reservas)
                .WithOne(r => r.Estacion)
                .HasForeignKey(r => r.EstacionId)
                .OnDelete(DeleteBehavior.Restrict);
+
+        // Relación con Horarios se configura en ConfiguracionHorarioConfiguration
+
+        // Ignorar propiedades calculadas
+        builder.Ignore(e => e.TieneBarberoAsignado);
+        builder.Ignore(e => e.PuedeRecibirReservas);
+        builder.Ignore(e => e.DomainEvents);
     }
 }
 

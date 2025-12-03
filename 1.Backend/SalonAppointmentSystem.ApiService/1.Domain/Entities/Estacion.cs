@@ -1,4 +1,5 @@
 using SalonAppointmentSystem.ApiService.Domain.Common;
+using SalonAppointmentSystem.ApiService.Infrastructure.Identity;
 
 namespace SalonAppointmentSystem.ApiService.Domain.Entities;
 
@@ -8,6 +9,11 @@ namespace SalonAppointmentSystem.ApiService.Domain.Entities;
 public class Estacion : BaseEntity
 {
     public string Nombre { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Descripción o notas sobre la estación
+    /// </summary>
+    public string? Descripcion { get; set; }
 
     /// <summary>
     /// ID del barbero asignado a esta estación (FK a AspNetUsers)
@@ -25,7 +31,40 @@ public class Estacion : BaseEntity
     /// </summary>
     public int Orden { get; set; }
 
+    /// <summary>
+    /// Si es true, la estación usa el horario global del negocio.
+    /// Si es false, usa sus propios horarios personalizados.
+    /// </summary>
+    public bool UsaHorarioGenerico { get; set; } = true;
+
     // Propiedades de navegación (virtual para lazy loading)
+
+    /// <summary>
+    /// Barbero asignado a esta estación
+    /// </summary>
+    public virtual ApplicationUser? Barbero { get; set; }
+
+    /// <summary>
+    /// Reservas asociadas a esta estación
+    /// </summary>
     public virtual ICollection<Reserva> Reservas { get; set; } = new List<Reserva>();
+
+    /// <summary>
+    /// Horarios personalizados de esta estación
+    /// </summary>
+    public virtual ICollection<ConfiguracionHorario> Horarios { get; set; } = new List<ConfiguracionHorario>();
+
+    // Métodos de dominio
+
+    /// <summary>
+    /// Indica si la estación tiene un barbero asignado
+    /// </summary>
+    public bool TieneBarberoAsignado => !string.IsNullOrEmpty(BarberoId);
+
+    /// <summary>
+    /// Indica si la estación puede recibir reservas
+    /// (debe estar activa y tener barbero asignado)
+    /// </summary>
+    public bool PuedeRecibirReservas => Activa && TieneBarberoAsignado;
 }
 

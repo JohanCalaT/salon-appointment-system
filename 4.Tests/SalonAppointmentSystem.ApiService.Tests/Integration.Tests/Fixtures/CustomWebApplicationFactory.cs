@@ -74,7 +74,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IEstacionService, EstacionService>();
+            services.AddScoped<IHorarioService, HorarioService>();
             services.AddScoped<IEstacionRepository, EstacionRepository>();
+            services.AddScoped<IConfiguracionHorarioRepository, ConfiguracionHorarioRepository>();
 
             // Registrar AutoMapper
             services.AddAutoMapper(typeof(SalonAppointmentSystem.ApiService.Application.Mappings.UserMappingProfile).Assembly);
@@ -160,6 +163,8 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         // Remover servicios de autenticación
         services.RemoveAll(typeof(IAuthService));
         services.RemoveAll(typeof(IUserService));
+        services.RemoveAll(typeof(IEstacionService));
+        services.RemoveAll(typeof(IHorarioService));
     }
 
     /// <summary>
