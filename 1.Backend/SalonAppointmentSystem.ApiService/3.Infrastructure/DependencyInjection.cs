@@ -96,6 +96,9 @@ public static class DependencyInjection
         services.AddScoped<IEstacionService, EstacionService>();
         services.AddScoped<IHorarioService, HorarioService>();
 
+        // Registrar servicio de servicios de barbería
+        services.AddScoped<IServicioService, ServicioService>();
+
         // Registrar AutoMapper
         services.AddAutoMapper(typeof(Application.Mappings.UserMappingProfile).Assembly);
 
