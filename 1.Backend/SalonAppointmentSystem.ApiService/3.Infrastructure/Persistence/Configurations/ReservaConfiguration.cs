@@ -18,8 +18,20 @@ public class ReservaConfiguration : IEntityTypeConfiguration<Reserva>
         builder.Property(r => r.Id)
                .ValueGeneratedOnAdd();
 
+        // Código único para consulta de invitados
+        builder.Property(r => r.CodigoReserva)
+               .HasMaxLength(8)
+               .IsRequired();
+
         builder.Property(r => r.UsuarioId)
                .HasMaxLength(450); // Nullable para invitados
+
+        // Campos de auditoría - quién creó la reserva
+        builder.Property(r => r.CreadaPor)
+               .HasMaxLength(450);
+
+        builder.Property(r => r.RolCreador)
+               .HasMaxLength(50);
 
         builder.Property(r => r.NombreCliente)
                .HasMaxLength(200)
@@ -71,8 +83,13 @@ public class ReservaConfiguration : IEntityTypeConfiguration<Reserva>
         builder.HasIndex(r => r.Estado);
         builder.HasIndex(r => r.EmailCliente);
 
-        // Índice compuesto para búsqueda de solapamientos
-        builder.HasIndex(r => new { r.EstacionId, r.FechaHora, r.Estado });
+        // Índice único para código de reserva (búsqueda de invitados)
+        builder.HasIndex(r => r.CodigoReserva)
+               .IsUnique();
+
+        // Índice compuesto para búsqueda de solapamientos (crítico para rendimiento)
+        builder.HasIndex(r => new { r.EstacionId, r.FechaHora, r.Estado })
+               .HasDatabaseName("IX_Reserva_EstacionId_FechaHora_Estado");
 
         // Ignorar propiedades calculadas
         builder.Ignore(r => r.FechaHoraFin);

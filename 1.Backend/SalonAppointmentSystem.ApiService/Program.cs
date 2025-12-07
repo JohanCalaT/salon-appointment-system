@@ -1,5 +1,7 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MediatR;
+using SalonAppointmentSystem.ApiService.Application.Behaviors;
 using SalonAppointmentSystem.ApiService.Application.Validators.Users;
 using SalonAppointmentSystem.ApiService.Infrastructure;
 
@@ -7,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add service defaults & Aspire client integrations.
 builder.AddServiceDefaults();
+
+// Add Redis client for caching and distributed locks
+// El connection string "cache" es inyectado automáticamente por Aspire
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder.AddRedisClient("cache");
+}
 
 // Add Infrastructure layer (DbContext, Identity, JWT, Repositories, etc.)
 // El connection string "salondb" es inyectado automáticamente por Aspire
@@ -18,6 +27,18 @@ if (!builder.Environment.IsEnvironment("Testing"))
 
 // Add services to the container.
 builder.Services.AddProblemDetails();
+
+// Add MediatR with pipeline behaviors
+// Registra handlers desde el assembly de Application (donde están los Commands/Queries)
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssemblyContaining<CreateUserValidator>();
+
+    // Pipeline behaviors (orden de ejecución: primero Logging, luego Validation, luego Transaction)
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+});
 
 // Add FluentValidation
 builder.Services.AddFluentValidationAutoValidation();

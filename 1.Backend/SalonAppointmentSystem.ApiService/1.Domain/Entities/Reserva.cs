@@ -8,6 +8,15 @@ namespace SalonAppointmentSystem.ApiService.Domain.Entities;
 /// </summary>
 public class Reserva : BaseEntity
 {
+    // Caracteres permitidos para código de reserva (sin I, O, 0, 1 para evitar confusión)
+    private static readonly char[] CodigoChars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".ToCharArray();
+
+    /// <summary>
+    /// Código único de 8 caracteres para que invitados consulten su reserva
+    /// Ejemplo: "ABC12345"
+    /// </summary>
+    public string CodigoReserva { get; set; } = GenerarCodigoReserva();
+
     /// <summary>
     /// FK a la estación donde se realizará el servicio
     /// </summary>
@@ -17,6 +26,16 @@ public class Reserva : BaseEntity
     /// FK al usuario registrado (null para invitados)
     /// </summary>
     public string? UsuarioId { get; set; }
+
+    /// <summary>
+    /// ID del usuario que creó la reserva (Admin, Barbero, Cliente, o null para invitado self-service)
+    /// </summary>
+    public string? CreadaPor { get; set; }
+
+    /// <summary>
+    /// Rol del usuario que creó la reserva (para auditoría y permisos)
+    /// </summary>
+    public string? RolCreador { get; set; }
 
     /// <summary>
     /// Nombre del cliente (requerido para invitados y usuarios)
@@ -87,6 +106,17 @@ public class Reserva : BaseEntity
     /// Motivo de la cancelación
     /// </summary>
     public string? MotivoCancelacion { get; set; }
+
+    /// <summary>
+    /// Genera un código único de 8 caracteres alfanuméricos
+    /// </summary>
+    private static string GenerarCodigoReserva()
+    {
+        var random = Random.Shared;
+        return new string(Enumerable.Range(0, 8)
+            .Select(_ => CodigoChars[random.Next(CodigoChars.Length)])
+            .ToArray());
+    }
 
     // Propiedades de navegación (virtual para lazy loading)
     public virtual Estacion Estacion { get; set; } = null!;

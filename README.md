@@ -181,14 +181,24 @@ erDiagram
 
     Reserva {
         int Id PK
+        string CodigoReserva UK
         int EstacionId FK
         string UsuarioId FK
         int ServicioId FK
         string NombreCliente
         string EmailCliente
+        string TelefonoCliente
         DateTime FechaHora
+        int DuracionMinutos
+        decimal Precio
+        int PuntosGanados
         EstadoReserva Estado
         TipoReserva Tipo
+        string CreadaPor
+        string RolCreador
+        DateTime FechaCancelacion
+        string CanceladaPor
+        string MotivoCancelacion
     }
 
     ConfiguracionHorario {
@@ -209,6 +219,11 @@ erDiagram
 > - `EstacionId = NULL` → Horario global del negocio
 > - `EstacionId != NULL` → Horario personalizado de la estación
 > - `TipoHorario`: Regular (0), Especial (1), Bloqueado (2)
+
+> **Nota sobre Reservas:**
+> - `CodigoReserva`: Código único de 8 caracteres para consultas de invitados
+> - `CreadaPor/RolCreador`: Auditoría de quién creó la reserva
+> - Los campos `DuracionMinutos`, `Precio`, `PuntosGanados` se denormalizan al crear para mantener historial
 
 ---
 
@@ -318,6 +333,24 @@ Al ejecutar el AppHost, tendrás acceso a:
 | POST | `/api/horarios/estacion/{id}/especial` | Crear horario especial |
 | POST | `/api/horarios/estacion/{id}/bloquear-dia` | Bloquear día |
 
+### Endpoints de Reservas
+
+| Método | Endpoint | Autorización | Descripción |
+|--------|----------|--------------|-------------|
+| GET | `/api/reservas/slots` | Público | Obtener slots disponibles |
+| GET | `/api/reservas/cita-rapida` | Público | Próxima cita disponible |
+| POST | `/api/reservas/buscar` | Público | Buscar reserva por código |
+| POST | `/api/reservas/anonima` | Público | Crear reserva anónima |
+| POST | `/api/reservas/anonima/cancelar` | Público | Cancelar reserva anónima |
+| POST | `/api/reservas` | Autenticado | Crear reserva |
+| GET | `/api/reservas/{id}` | Autenticado | Obtener reserva por ID |
+| GET | `/api/reservas/mis-reservas` | Autenticado | Mis reservas |
+| POST | `/api/reservas/{id}/cancelar` | Autenticado | Cancelar reserva |
+| GET | `/api/reservas/mi-agenda` | Admin/Barbero | Agenda del barbero |
+| GET | `/api/reservas` | Admin | Listar reservas paginado |
+| POST | `/api/reservas/{id}/completar` | Admin/Barbero | Marcar completada |
+| PATCH | `/api/reservas/{id}` | Admin/Barbero | Actualizar reserva |
+
 ### Ejemplo de Respuesta API
 
 ```json
@@ -346,7 +379,7 @@ Ejecutar con cobertura:
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
-**Estado actual:** ✅ 141 tests pasando
+**Estado actual:** ✅ 180 tests pasando
 
 ---
 
@@ -360,8 +393,15 @@ dotnet test --collect:"XPlat Code Coverage"
 - [x] CRUD completo de Usuarios con autorización
 - [x] Gestión de Estaciones (CRUD completo)
 - [x] Sistema de Horarios (global, por estación, especiales)
-- [ ] CRUD completo de Reservas
-- [ ] CRUD de Servicios
+- [x] CRUD de Servicios
+- [x] **Módulo completo de Reservas con MediatR/CQRS**
+  - [x] Redis para locks distribuidos y cache
+  - [x] Creación con validación de solapamiento
+  - [x] Reservas anónimas con código único
+  - [x] Cancelación y completar reservas
+  - [x] Consulta de slots disponibles
+  - [x] Cita rápida (próximo hueco)
+  - [x] Tests de integración (180 tests)
 - [ ] Interfaz de cliente para reservas
 - [ ] Sistema de notificaciones
 - [ ] Reportes y estadísticas

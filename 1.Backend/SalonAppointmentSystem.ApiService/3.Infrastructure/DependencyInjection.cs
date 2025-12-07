@@ -7,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using RedLockNet;
+using RedLockNet.SERedis;
+using RedLockNet.SERedis.Configuration;
 using SalonAppointmentSystem.ApiService.Application.Common.Constants;
 using SalonAppointmentSystem.ApiService.Application.Common.Interfaces;
 using SalonAppointmentSystem.ApiService.Application.Common.Settings;
@@ -16,7 +19,9 @@ using SalonAppointmentSystem.ApiService.Infrastructure.Persistence;
 using SalonAppointmentSystem.ApiService.Infrastructure.Persistence.Repositories;
 using SalonAppointmentSystem.ApiService.Infrastructure.Seeders;
 using SalonAppointmentSystem.ApiService.Infrastructure.Services;
+using SalonAppointmentSystem.ApiService.Infrastructure.Services.Redis;
 using SalonAppointmentSystem.ApiService.Presentation.Authorization;
+using StackExchange.Redis;
 
 namespace SalonAppointmentSystem.ApiService.Infrastructure;
 
@@ -98,6 +103,9 @@ public static class DependencyInjection
 
         // Registrar servicio de servicios de barbería
         services.AddScoped<IServicioService, ServicioService>();
+
+        // Registrar servicios de Redis para reservas (locks y cache)
+        services.AddRedisServices();
 
         // Registrar AutoMapper
         services.AddAutoMapper(typeof(Application.Mappings.UserMappingProfile).Assembly);
@@ -200,5 +208,36 @@ public static class DependencyInjection
         // Ejecutar seeder
         await seeder.SeedAsync();
     }
-}
 
+    /// <summary>
+    /// Registra los servicios de Redis para el módulo de reservas.
+    /// Requiere que IConnectionMultiplexer ya esté registrado (via Aspire AddRedisClient).
+    /// </summary>
+    public static IServiceCollection AddRedisServices(this IServiceCollection services)
+    {
+        // Registrar RedLock Factory para locks distribuidos
+        // Solo se registra si IConnectionMultiplexer está disponible
+        services.AddSingleton<IDistributedLockFactory>(sp =>
+        {
+            var multiplexer = sp.GetService<IConnectionMultiplexer>();
+            if (multiplexer == null)
+            {
+                // En ambiente de testing, retornar un factory vacío
+                var logger = sp.GetRequiredService<ILogger<RedLockFactory>>();
+                logger.LogWarning("Redis no disponible. Locks distribuidos deshabilitados.");
+                return RedLockFactory.Create(new List<RedLockMultiplexer>());
+            }
+
+            return RedLockFactory.Create(new List<RedLockMultiplexer>
+            {
+                new(multiplexer)
+            });
+        });
+
+        // Registrar servicios de reservas
+        services.AddScoped<IReservaLockService, ReservaLockService>();
+        services.AddScoped<IReservaCacheService, ReservaCacheService>();
+
+        return services;
+    }
+}

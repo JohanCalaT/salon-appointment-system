@@ -1,4 +1,6 @@
 using System.Text;
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,9 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using SalonAppointmentSystem.ApiService.Application.Behaviors;
 using SalonAppointmentSystem.ApiService.Application.Common.Constants;
 using SalonAppointmentSystem.ApiService.Application.Common.Interfaces;
 using SalonAppointmentSystem.ApiService.Application.Common.Settings;
+using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Commands.CreateReserva;
 using SalonAppointmentSystem.ApiService.Domain.Interfaces;
 using SalonAppointmentSystem.ApiService.Infrastructure.Identity;
 using SalonAppointmentSystem.ApiService.Infrastructure.Persistence;
@@ -80,6 +84,21 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             services.AddScoped<IEstacionRepository, EstacionRepository>();
             services.AddScoped<IConfiguracionHorarioRepository, ConfiguracionHorarioRepository>();
             services.AddScoped<IServicioRepository, ServicioRepository>();
+            services.AddScoped<IReservaRepository, ReservaRepository>();
+
+            // Registrar mocks de Redis para tests
+            services.AddScoped<IReservaLockService, MockReservaLockService>();
+            services.AddScoped<IReservaCacheService, MockReservaCacheService>();
+
+            // Registrar MediatR para Commands/Queries de Reservas
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(CreateReservaCommand).Assembly);
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            });
+
+            // Registrar validadores de FluentValidation
+            services.AddValidatorsFromAssembly(typeof(CreateReservaCommand).Assembly);
 
             // Registrar AutoMapper
             services.AddAutoMapper(typeof(SalonAppointmentSystem.ApiService.Application.Mappings.UserMappingProfile).Assembly);
