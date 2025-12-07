@@ -1,4 +1,4 @@
-namespace SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
+namespace SalonAppointmentSystem.Shared.DTOs.Reservas;
 
 /// <summary>
 /// DTO que representa un slot de tiempo disponible para reservar

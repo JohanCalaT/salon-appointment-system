@@ -1,8 +1,8 @@
 using AutoMapper;
 using MediatR;
 using SalonAppointmentSystem.ApiService.Application.Common;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
 using SalonAppointmentSystem.ApiService.Domain.Interfaces;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 
 namespace SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.GetReservaById;
 

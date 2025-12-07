@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SalonAppointmentSystem.ApiService.Application.Common;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
 using SalonAppointmentSystem.ApiService.Domain.Entities;
 using SalonAppointmentSystem.ApiService.Domain.Interfaces;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 using SalonAppointmentSystem.Shared.Enums;
 
 namespace SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.GetCitaRapida;

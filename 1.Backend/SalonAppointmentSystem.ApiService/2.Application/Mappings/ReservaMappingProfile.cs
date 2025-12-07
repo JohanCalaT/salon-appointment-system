@@ -1,6 +1,6 @@
 using AutoMapper;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
 using SalonAppointmentSystem.ApiService.Domain.Entities;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 
 namespace SalonAppointmentSystem.ApiService.Application.Mappings;
 

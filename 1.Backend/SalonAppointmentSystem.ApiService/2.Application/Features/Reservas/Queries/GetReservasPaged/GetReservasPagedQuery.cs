@@ -1,6 +1,6 @@
 using MediatR;
 using SalonAppointmentSystem.ApiService.Application.Common;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 using SalonAppointmentSystem.Shared.Enums;
 using SalonAppointmentSystem.Shared.Models;
 

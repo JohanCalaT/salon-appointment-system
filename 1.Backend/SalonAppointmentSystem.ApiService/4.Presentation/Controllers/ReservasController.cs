@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SalonAppointmentSystem.ApiService.Application.Common.Constants;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
 using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Commands.CancelReserva;
 using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Commands.CompletarReserva;
 using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Commands.CreateReserva;
@@ -15,6 +14,7 @@ using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.Ge
 using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.GetReservasPaged;
 using SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.GetSlotsDisponibles;
 using SalonAppointmentSystem.ApiService.Infrastructure.Identity;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 using SalonAppointmentSystem.Shared.Enums;
 using SalonAppointmentSystem.Shared.Models;
 

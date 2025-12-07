@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
 using SalonAppointmentSystem.ApiService.Tests.Integration.Tests.Fixtures;
 using SalonAppointmentSystem.Shared.DTOs.Estaciones;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 using SalonAppointmentSystem.Shared.DTOs.Servicios;
 using SalonAppointmentSystem.Shared.Enums;
 using SalonAppointmentSystem.Shared.Models;

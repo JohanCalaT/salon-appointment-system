@@ -2,9 +2,9 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SalonAppointmentSystem.ApiService.Application.Common;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
 using SalonAppointmentSystem.ApiService.Domain.Entities;
 using SalonAppointmentSystem.ApiService.Infrastructure.Persistence;
+using SalonAppointmentSystem.Shared.DTOs.Reservas;
 using SalonAppointmentSystem.Shared.Models;
 
 namespace SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.GetReservasPaged;

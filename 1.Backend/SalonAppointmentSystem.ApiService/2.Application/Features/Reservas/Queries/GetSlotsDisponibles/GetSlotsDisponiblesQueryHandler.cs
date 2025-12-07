@@ -4,9 +4,9 @@ using SalonAppointmentSystem.ApiService.Application.Common;
 using SalonAppointmentSystem.ApiService.Application.Common.Interfaces;
 using SalonAppointmentSystem.ApiService.Domain.Interfaces;
 using SalonAppointmentSystem.Shared.Enums;
-using ReservaSlotDto = SalonAppointmentSystem.ApiService.Application.DTOs.Reservas.SlotDisponibleDto;
 using CacheSlotDto = SalonAppointmentSystem.ApiService.Application.Common.Interfaces.SlotDisponibleDto;
-using SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
+using SlotDisponibleDto = SalonAppointmentSystem.Shared.DTOs.Reservas.SlotDisponibleDto;
+using SlotsDelDiaDto = SalonAppointmentSystem.Shared.DTOs.Reservas.SlotsDelDiaDto;
 
 namespace SalonAppointmentSystem.ApiService.Application.Features.Reservas.Queries.GetSlotsDisponibles;
 
@@ -56,11 +56,11 @@ public class GetSlotsDisponiblesQueryHandler
         {
             _logger.LogDebug("Slots obtenidos del cache: Est={EstacionId}, Fecha={Fecha}",
                 request.EstacionId, request.Fecha.Date);
-            
+
             return Result<SlotsDelDiaDto>.Success(new SlotsDelDiaDto
             {
                 Fecha = request.Fecha.Date,
-                Slots = cachedSlots.Select(s => new ReservaSlotDto
+                Slots = cachedSlots.Select(s => new SlotDisponibleDto
                 {
                     FechaHora = s.FechaHora,
                     HoraFormateada = s.HoraFormateada,
@@ -79,7 +79,7 @@ public class GetSlotsDisponiblesQueryHandler
             var emptyResult = new SlotsDelDiaDto
             {
                 Fecha = request.Fecha.Date,
-                Slots = new List<ReservaSlotDto>()
+                Slots = new List<SlotDisponibleDto>()
             };
             return Result<SlotsDelDiaDto>.Success(emptyResult);
         }
@@ -115,11 +115,11 @@ public class GetSlotsDisponiblesQueryHandler
         return Result<SlotsDelDiaDto>.Success(result);
     }
 
-    private List<DTOs.Reservas.SlotDisponibleDto> CalcularSlots(
+    private List<SlotDisponibleDto> CalcularSlots(
         DateTime fecha, TimeSpan horaInicio, TimeSpan horaFin,
         int duracionMinutos, IEnumerable<Domain.Entities.Reserva> reservas)
     {
-        var slots = new List<DTOs.Reservas.SlotDisponibleDto>();
+        var slots = new List<SlotDisponibleDto>();
         var ahora = DateTime.UtcNow;
         var horaActual = horaInicio;
 
@@ -143,7 +143,7 @@ public class GetSlotsDisponiblesQueryHandler
             else if (estaOcupado)
                 razonNoDisponible = "Horario ocupado";
 
-            slots.Add(new DTOs.Reservas.SlotDisponibleDto
+            slots.Add(new SlotDisponibleDto
             {
                 FechaHora = fechaHoraSlot,
                 HoraFormateada = horaActual.ToString(@"hh\:mm"),

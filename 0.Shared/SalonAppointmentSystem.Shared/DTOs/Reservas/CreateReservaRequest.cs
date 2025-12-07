@@ -1,6 +1,6 @@
 using SalonAppointmentSystem.Shared.Enums;
 
-namespace SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
+namespace SalonAppointmentSystem.Shared.DTOs.Reservas;
 
 /// <summary>
 /// Request para crear una nueva reserva

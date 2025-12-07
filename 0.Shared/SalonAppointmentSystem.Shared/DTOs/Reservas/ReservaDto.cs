@@ -1,6 +1,6 @@
 using SalonAppointmentSystem.Shared.Enums;
 
-namespace SalonAppointmentSystem.ApiService.Application.DTOs.Reservas;
+namespace SalonAppointmentSystem.Shared.DTOs.Reservas;
 
 /// <summary>
 /// DTO de respuesta con información completa de una reserva
