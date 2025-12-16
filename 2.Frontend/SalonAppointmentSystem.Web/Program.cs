@@ -1,5 +1,6 @@
 using SalonAppointmentSystem.Web;
 using SalonAppointmentSystem.Web.Components;
+using SalonAppointmentSystem.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,17 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddOutputCache();
 
+// ===== MEDIATR (CQRS) =====
+builder.Services.AddMediatR(cfg =>
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+// ===== BLAZORISE =====
+builder.Services.AddBlazoriseCommunity();
+
+// ===== API CLIENT (Aspire Service Discovery) =====
+builder.Services.AddApiClient(builder.Configuration);
+
+// Cliente HTTP de ejemplo (Weather) - puede eliminarse cuando no se necesite
 builder.Services.AddHttpClient<WeatherApiClient>(client =>
     {
         // This URL uses "https+http://" to indicate HTTPS is preferred over HTTP.
