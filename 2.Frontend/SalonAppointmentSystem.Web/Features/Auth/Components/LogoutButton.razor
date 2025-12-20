@@ -1,0 +1,30 @@
+@* Botón de Logout con confirmación *@
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+
+<AuthorizeView>
+    <Authorized>
+        <Button Color="@ButtonColor" 
+                Outline="@Outline"
+                Size="@ButtonSize"
+                Loading="@isLoading"
+                Disabled="@isLoading"
+                Clicked="@OnLogoutClickedAsync"
+                Class="@CssClass">
+            @if (isLoading)
+            {
+                <i class="fas fa-spinner fa-spin me-2"></i>
+                <span>Cerrando sesión...</span>
+            }
+            else
+            {
+                @if (ShowIcon)
+                {
+                    <i class="fas fa-sign-out-alt me-2"></i>
+                }
+                <span>@ButtonText</span>
+            }
+        </Button>
+    </Authorized>
+</AuthorizeView>
+

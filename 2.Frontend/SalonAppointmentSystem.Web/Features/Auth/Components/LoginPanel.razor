@@ -1,12 +1,14 @@
 @* Panel lateral de Login - Estado 2 *@
 @rendermode InteractiveServer
+@using SalonAppointmentSystem.Web.Features.Auth.Models
 
 <div class="login-panel">
     <div class="login-panel-header">
         <h2 class="login-title">Iniciar Sesión</h2>
-        <Button Color="Color.Dark" 
+        <Button Color="Color.Dark"
                 Clicked="OnCloseClicked"
-                Class="close-button">
+                Class="close-button"
+                Disabled="@isLoading">
             <i class="fas fa-times"></i>
         </Button>
     </div>
@@ -14,33 +16,67 @@
     <div class="login-panel-body">
         <p class="login-subtitle">Accede a tu cuenta para gestionar tus citas</p>
 
-        <Field>
-            <FieldLabel>Email</FieldLabel>
-            <TextEdit @bind-Text="email" 
-                      Placeholder="tu@email.com"
-                      Role="TextRole.Email">
-            </TextEdit>
-        </Field>
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <Alert Color="Color.Danger" Visible="true" Dismisable="true">
+                <AlertMessage>
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    @errorMessage
+                </AlertMessage>
+            </Alert>
+        }
 
-        <Field>
-            <FieldLabel>Contraseña</FieldLabel>
-            <TextEdit @bind-Text="password" 
-                      Placeholder="••••••••"
-                      Role="TextRole.Password">
-            </TextEdit>
-        </Field>
+        <EditForm Model="@loginModel" OnValidSubmit="@OnLoginSubmitAsync">
+            <DataAnnotationsValidator />
 
-        <Field>
-            <Check TValue="bool" @bind-Checked="rememberMe">Recordarme</Check>
-        </Field>
+            <Field>
+                <FieldLabel>Email</FieldLabel>
+                <TextEdit @bind-Text="@loginModel.Email"
+                          Placeholder="tu@email.com"
+                          Role="TextRole.Email"
+                          Disabled="@isLoading">
+                    <Feedback>
+                        <ValidationMessage For="@(() => loginModel.Email)" />
+                    </Feedback>
+                </TextEdit>
+            </Field>
 
-        <Button Color="Color.Primary" 
-                Block="true"
-                Clicked="OnLoginClicked"
-                Class="login-button">
-            <i class="fas fa-sign-in-alt me-2"></i>
-            Iniciar Sesión
-        </Button>
+            <Field>
+                <FieldLabel>Contraseña</FieldLabel>
+                <TextEdit @bind-Text="@loginModel.Password"
+                          Placeholder="••••••••"
+                          Role="TextRole.Password"
+                          Disabled="@isLoading">
+                    <Feedback>
+                        <ValidationMessage For="@(() => loginModel.Password)" />
+                    </Feedback>
+                </TextEdit>
+            </Field>
+
+            <Field>
+                <Check TValue="bool" @bind-Checked="@loginModel.RememberMe" Disabled="@isLoading">
+                    Recordarme
+                </Check>
+            </Field>
+
+            <Button Color="Color.Primary"
+                    Block="true"
+                    Type="ButtonType.Submit"
+                    Loading="@isLoading"
+                    Disabled="@isLoading"
+                    Class="login-button">
+                @if (isLoading)
+                {
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    <span>Iniciando sesión...</span>
+                }
+                else
+                {
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    <span>Iniciar Sesión</span>
+                }
+            </Button>
+        </EditForm>
 
         <div class="login-footer">
             <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
@@ -48,9 +84,10 @@
 
         <Divider DividerType="DividerType.TextContent" Text="O" />
 
-        <Button Color="Color.Secondary" 
+        <Button Color="Color.Secondary"
                 Outline="true"
                 Block="true"
+                Disabled="@isLoading"
                 Class="register-button">
             <i class="fas fa-user-plus me-2"></i>
             Crear Cuenta

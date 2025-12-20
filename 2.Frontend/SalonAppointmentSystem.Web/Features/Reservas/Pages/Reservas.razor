@@ -1,0 +1,242 @@
+@page "/reservas"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+
+<PageTitle>Reservas - Barbería Premium</PageTitle>
+
+@if (isLoading)
+{
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted">Cargando información...</p>
+        </div>
+    </div>
+}
+else
+{
+<div class="reservas-container">
+    <div class="reservas-header">
+        <h1 class="reservas-title">
+            <i class="fas fa-calendar-alt me-3"></i>
+            Reservar Cita
+        </h1>
+    </div>
+
+    <AuthorizeView>
+        <Authorized>
+            @* Usuario autenticado *@
+            <Alert Color="Color.Success" Visible="true">
+                <AlertMessage>
+                    <i class="fas fa-check-circle me-2"></i>
+                    <strong>Bienvenido, @userName</strong> - Estás autenticado como @userRole
+                </AlertMessage>
+            </Alert>
+
+            <div class="user-info-section">
+                <UserInfo ShowAvatar="true" 
+                          ShowName="true" 
+                          ShowEmail="true" 
+                          ShowRole="true"
+                          ShowPoints="true" />
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            @* Usuario invitado *@
+            <Alert Color="Color.Info" Visible="true">
+                <AlertMessage>
+                    <i class="fas fa-user me-2"></i>
+                    <strong>Bienvenido, Invitado</strong> - Puedes reservar una cita sin necesidad de registrarte
+                </AlertMessage>
+            </Alert>
+
+            <Alert Color="Color.Warning" Visible="true">
+                <AlertDescription>
+                    <i class="fas fa-info-circle me-2"></i>
+                    Si deseas acceder a beneficios exclusivos, historial de citas y puntos de fidelidad, 
+                    <a href="#" @onclick="OnLoginClicked" @onclick:preventDefault="true" class="alert-link">
+                        <strong>inicia sesión</strong>
+                    </a> 
+                    o 
+                    <a href="#" @onclick="OnRegisterClicked" @onclick:preventDefault="true" class="alert-link">
+                        <strong>regístrate</strong>
+                    </a>.
+                </AlertDescription>
+            </Alert>
+        </NotAuthorized>
+    </AuthorizeView>
+
+    <div class="reservas-content">
+        <Row>
+            <Column ColumnSize="ColumnSize.Is12.Is8.OnDesktop">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            <i class="fas fa-calendar-check me-2"></i>
+                            Selecciona tu Servicio y Horario
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <p class="text-muted">
+                            <i class="fas fa-info-circle me-2"></i>
+                            El sistema de reservas estará disponible próximamente. 
+                            Por ahora puedes explorar nuestros servicios.
+                        </p>
+
+                        <Divider />
+
+                        <h5 class="mb-3">
+                            <i class="fas fa-cut me-2"></i>
+                            Servicios Disponibles
+                        </h5>
+
+                        <div class="servicios-list">
+                            <Card Margin="Margin.Is2.FromBottom">
+                                <CardBody>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Corte de Cabello</h6>
+                                            <small class="text-muted">Duración: 30 min</small>
+                                        </div>
+                                        <Badge Color="Color.Primary" Pill="true">$15.00</Badge>
+                                    </div>
+                                </CardBody>
+                            </Card>
+
+                            <Card Margin="Margin.Is2.FromBottom">
+                                <CardBody>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Afeitado Clásico</h6>
+                                            <small class="text-muted">Duración: 20 min</small>
+                                        </div>
+                                        <Badge Color="Color.Primary" Pill="true">$10.00</Badge>
+                                    </div>
+                                </CardBody>
+                            </Card>
+
+                            <Card Margin="Margin.Is2.FromBottom">
+                                <CardBody>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Corte + Barba</h6>
+                                            <small class="text-muted">Duración: 45 min</small>
+                                        </div>
+                                        <Badge Color="Color.Primary" Pill="true">$22.00</Badge>
+                                    </div>
+                                </CardBody>
+                            </Card>
+
+                            <Card Margin="Margin.Is2.FromBottom">
+                                <CardBody>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <h6 class="mb-1">Tratamiento Capilar</h6>
+                                            <small class="text-muted">Duración: 60 min</small>
+                                        </div>
+                                        <Badge Color="Color.Primary" Pill="true">$35.00</Badge>
+                                    </div>
+                                </CardBody>
+                            </Card>
+                        </div>
+
+                        <Divider />
+
+                        <Button Color="Color.Primary" Block="true" Disabled="true">
+                            <i class="fas fa-calendar-plus me-2"></i>
+                            Reservar Cita (Próximamente)
+                        </Button>
+                    </CardBody>
+                </Card>
+            </Column>
+
+            <Column ColumnSize="ColumnSize.Is12.Is4.OnDesktop">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            <i class="fas fa-info-circle me-2"></i>
+                            Información
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <h6>
+                            <i class="fas fa-clock me-2"></i>
+                            Horario de Atención
+                        </h6>
+                        <p class="small text-muted">
+                            Lunes a Viernes: 9:00 AM - 8:00 PM<br />
+                            Sábados: 9:00 AM - 6:00 PM<br />
+                            Domingos: Cerrado
+                        </p>
+
+                        <Divider />
+
+                        <h6>
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            Ubicación
+                        </h6>
+                        <p class="small text-muted">
+                            Calle Principal #123<br />
+                            Centro, Ciudad<br />
+                            Tel: (123) 456-7890
+                        </p>
+                    </CardBody>
+                </Card>
+            </Column>
+        </Row>
+    </div>
+</div>
+
+<style>
+    .reservas-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .reservas-header {
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--bs-primary);
+    }
+
+    .reservas-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--bs-dark);
+        margin: 0;
+    }
+
+    .user-info-section {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--bs-light);
+        border-radius: 0.5rem;
+    }
+
+    .servicios-list {
+        margin-bottom: 1rem;
+    }
+
+    .alert-link {
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .alert-link:hover {
+        text-decoration: none;
+    }
+
+    @@media (max-width: 768px) {
+        .reservas-container {
+            padding: 1rem;
+        }
+
+        .reservas-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+}

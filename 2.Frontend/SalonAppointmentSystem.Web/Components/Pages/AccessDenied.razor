@@ -1,0 +1,153 @@
+@page "/access-denied"
+@rendermode InteractiveServer
+
+<PageTitle>Acceso Denegado - Barbería Premium</PageTitle>
+
+<div class="access-denied-container">
+    <div class="access-denied-content">
+        <div class="access-denied-icon">
+            <i class="fas fa-lock"></i>
+        </div>
+
+        <h1 class="access-denied-title">Acceso Denegado</h1>
+        
+        <p class="access-denied-message">
+            Lo sentimos, no tienes permisos para acceder a esta página.
+        </p>
+
+        <AuthorizeView>
+            <Authorized>
+                <Alert Color="Color.Warning" Visible="true">
+                    <AlertMessage>
+                        <i class="fas fa-info-circle me-2"></i>
+                        Estás autenticado como <strong>@userName</strong> con rol <strong>@userRole</strong>, 
+                        pero no tienes los permisos necesarios para acceder a este recurso.
+                    </AlertMessage>
+                </Alert>
+
+                <div class="access-denied-actions">
+                    <Button Color="Color.Primary" Clicked="@OnGoHomeClicked">
+                        <i class="fas fa-home me-2"></i>
+                        Ir al Inicio
+                    </Button>
+
+                    <Button Color="Color.Secondary" Outline="true" Clicked="@OnGoBackClicked">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Volver Atrás
+                    </Button>
+
+                    <LogoutButton ButtonText="Cerrar Sesión"
+                                  ButtonColor="Color.Danger"
+                                  Outline="true"
+                                  ShowIcon="true" />
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <Alert Color="Color.Info" Visible="true">
+                    <AlertMessage>
+                        <i class="fas fa-user me-2"></i>
+                        Necesitas iniciar sesión para acceder a esta página.
+                    </AlertMessage>
+                </Alert>
+
+                <div class="access-denied-actions">
+                    <Button Color="Color.Primary" Clicked="@OnLoginClicked">
+                        <i class="fas fa-sign-in-alt me-2"></i>
+                        Iniciar Sesión
+                    </Button>
+
+                    <Button Color="Color.Secondary" Outline="true" Clicked="@OnGoHomeClicked">
+                        <i class="fas fa-home me-2"></i>
+                        Ir al Inicio
+                    </Button>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+
+        <div class="access-denied-help">
+            <p class="text-muted">
+                <i class="fas fa-question-circle me-2"></i>
+                Si crees que esto es un error, contacta al administrador del sistema.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .access-denied-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+    }
+
+    .access-denied-content {
+        background: white;
+        border-radius: 1rem;
+        padding: 3rem;
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .access-denied-icon {
+        font-size: 5rem;
+        color: var(--bs-danger);
+        margin-bottom: 1.5rem;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @@keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-10px); }
+        75% { transform: translateX(10px); }
+    }
+
+    .access-denied-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--bs-dark);
+        margin-bottom: 1rem;
+    }
+
+    .access-denied-message {
+        font-size: 1.1rem;
+        color: var(--bs-secondary);
+        margin-bottom: 2rem;
+    }
+
+    .access-denied-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .access-denied-help {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--bs-gray-300);
+    }
+
+    @@media (max-width: 768px) {
+        .access-denied-content {
+            padding: 2rem;
+        }
+
+        .access-denied-icon {
+            font-size: 3.5rem;
+        }
+
+        .access-denied-title {
+            font-size: 1.8rem;
+        }
+
+        .access-denied-message {
+            font-size: 1rem;
+        }
+    }
+</style>
+

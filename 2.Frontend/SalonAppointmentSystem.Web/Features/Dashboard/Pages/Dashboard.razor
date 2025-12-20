@@ -1,0 +1,185 @@
+@page "/dashboard"
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using SalonAppointmentSystem.Web.Constants
+
+<PageTitle>Dashboard - Barbería Premium</PageTitle>
+
+@if (isLoading)
+{
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-3 text-muted">Verificando permisos...</p>
+        </div>
+    </div>
+}
+else if (isAuthorized)
+{
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h1 class="dashboard-title">
+            <i class="fas fa-tachometer-alt me-3"></i>
+            Panel de Control
+        </h1>
+        <div class="dashboard-user-info">
+            <UserInfo ShowAvatar="true" 
+                      ShowName="true" 
+                      ShowEmail="true" 
+                      ShowRole="true"
+                      ShowPoints="false" />
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <AuthorizeView Roles="@AppRoles.Admin">
+            <Authorized>
+                <Alert Color="Color.Info" Visible="true">
+                    <AlertMessage>
+                        <i class="fas fa-crown me-2"></i>
+                        <strong>Bienvenido Administrador</strong> - Tienes acceso completo al sistema
+                    </AlertMessage>
+                </Alert>
+            </Authorized>
+        </AuthorizeView>
+
+        <AuthorizeView Roles="@AppRoles.Barbero">
+            <Authorized>
+                <Alert Color="Color.Primary" Visible="true">
+                    <AlertMessage>
+                        <i class="fas fa-cut me-2"></i>
+                        <strong>Bienvenido Barbero</strong> - Gestiona tus citas y clientes
+                    </AlertMessage>
+                </Alert>
+            </Authorized>
+        </AuthorizeView>
+
+        <Row>
+            <Column ColumnSize="ColumnSize.Is12.Is6.OnDesktop.Is4.OnWidescreen">
+                <Card Margin="Margin.Is3.FromBottom">
+                    <CardBody>
+                        <CardTitle Size="5">
+                            <i class="fas fa-calendar-check text-success me-2"></i>
+                            Citas de Hoy
+                        </CardTitle>
+                        <CardText>
+                            <h2 class="display-4">@citasHoy</h2>
+                            <small class="text-muted">Citas programadas para hoy</small>
+                        </CardText>
+                    </CardBody>
+                </Card>
+            </Column>
+
+            <Column ColumnSize="ColumnSize.Is12.Is6.OnDesktop.Is4.OnWidescreen">
+                <Card Margin="Margin.Is3.FromBottom">
+                    <CardBody>
+                        <CardTitle Size="5">
+                            <i class="fas fa-users text-primary me-2"></i>
+                            Clientes Activos
+                        </CardTitle>
+                        <CardText>
+                            <h2 class="display-4">@clientesActivos</h2>
+                            <small class="text-muted">Clientes registrados</small>
+                        </CardText>
+                    </CardBody>
+                </Card>
+            </Column>
+
+            <Column ColumnSize="ColumnSize.Is12.Is6.OnDesktop.Is4.OnWidescreen">
+                <Card Margin="Margin.Is3.FromBottom">
+                    <CardBody>
+                        <CardTitle Size="5">
+                            <i class="fas fa-dollar-sign text-warning me-2"></i>
+                            Ingresos del Mes
+                        </CardTitle>
+                        <CardText>
+                            <h2 class="display-4">$@ingresosMes</h2>
+                            <small class="text-muted">Total del mes actual</small>
+                        </CardText>
+                    </CardBody>
+                </Card>
+            </Column>
+        </Row>
+
+        <Row>
+            <Column ColumnSize="ColumnSize.Is12">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>
+                            <i class="fas fa-list me-2"></i>
+                            Acciones Rápidas
+                        </CardTitle>
+                    </CardHeader>
+                    <CardBody>
+                        <Buttons>
+                            <Button Color="Color.Primary" Clicked="@OnNuevaCitaClicked">
+                                <i class="fas fa-plus me-2"></i>
+                                Nueva Cita
+                            </Button>
+                            <Button Color="Color.Success" Clicked="@OnVerReservasClicked">
+                                <i class="fas fa-calendar-alt me-2"></i>
+                                Ver Reservas
+                            </Button>
+                            <AuthorizeView Roles="@AppRoles.Admin">
+                                <Authorized>
+                                    <Button Color="Color.Warning" Clicked="@OnGestionarUsuariosClicked">
+                                        <i class="fas fa-users-cog me-2"></i>
+                                        Gestionar Usuarios
+                                    </Button>
+                                    <Button Color="Color.Info" Clicked="@OnConfiguracionClicked">
+                                        <i class="fas fa-cog me-2"></i>
+                                        Configuración
+                                    </Button>
+                                </Authorized>
+                            </AuthorizeView>
+                        </Buttons>
+                    </CardBody>
+                </Card>
+            </Column>
+        </Row>
+    </div>
+</div>
+
+<style>
+    .dashboard-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid var(--bs-primary);
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--bs-dark);
+        margin: 0;
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1rem;
+        }
+
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .dashboard-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+}

@@ -1,0 +1,11 @@
+@* Componente de redirección a Login con ReturnUrl *@
+@inject NavigationManager Navigation
+
+@code {
+    protected override void OnInitialized()
+    {
+        var returnUrl = Navigation.Uri;
+        Navigation.NavigateTo($"/?returnUrl={Uri.EscapeDataString(returnUrl)}");
+    }
+}
+

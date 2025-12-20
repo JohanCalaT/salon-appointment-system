@@ -1,4 +1,5 @@
 @* Navbar transparente para el Hero *@
+@using Microsoft.AspNetCore.Components.Authorization
 
 <nav class="navbar-hero">
     <div class="navbar-container">
@@ -10,22 +11,85 @@
         </div>
 
         <div class="navbar-actions">
-            <Button Color="Color.Primary" 
+            <Button Color="Color.Primary"
                     Outline="true"
                     Clicked="OnReservarClicked"
                     Class="navbar-btn">
                 <i class="fas fa-calendar-alt me-2"></i>
                 Reservar
             </Button>
-            
-            <Button Color="Color.Secondary" 
-                    Outline="true"
-                    Clicked="HandleLoginClicked"
-                    Class="navbar-btn">
-                <i class="fas fa-user me-2"></i>
-                Login
-            </Button>
+
+            <AuthorizeView>
+                <Authorized>
+                    @* Usuario autenticado: Mostrar info y botón de logout *@
+                    <div class="navbar-user-section">
+                        <UserInfo ShowAvatar="true"
+                                  ShowName="true"
+                                  ShowEmail="false"
+                                  ShowRole="true"
+                                  ShowPoints="false"
+                                  ShowGuestMessage="false"
+                                  CssClass="navbar-user-info" />
+
+                        <LogoutButton ButtonText="Salir"
+                                      ButtonColor="Color.Secondary"
+                                      Outline="true"
+                                      ShowIcon="true"
+                                      CssClass="navbar-btn" />
+                    </div>
+                </Authorized>
+                <NotAuthorized>
+                    @* Usuario no autenticado: Mostrar botón de login *@
+                    <Button Color="Color.Secondary"
+                            Outline="true"
+                            Clicked="HandleLoginClicked"
+                            Class="navbar-btn">
+                        <i class="fas fa-user me-2"></i>
+                        Login
+                    </Button>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
     </div>
 </nav>
+
+<style>
+    .navbar-user-section {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .navbar-user-info {
+        padding: 0.5rem 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 0.5rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .navbar-user-info .user-name {
+        color: white;
+        font-size: 0.9rem;
+    }
+
+    .navbar-user-info .user-avatar {
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    @@media (max-width: 768px) {
+        .navbar-user-section {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .navbar-user-info {
+            padding: 0.25rem 0.5rem;
+        }
+
+        .navbar-user-info .user-name {
+            font-size: 0.8rem;
+        }
+    }
+</style>
 

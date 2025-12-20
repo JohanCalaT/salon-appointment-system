@@ -1,0 +1,103 @@
+@* Componente para mostrar información del usuario autenticado *@
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Components.Authorization
+
+<AuthorizeView>
+    <Authorized>
+        <div class="user-info @CssClass">
+            @if (ShowAvatar)
+            {
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            }
+            
+            <div class="user-details">
+                @if (ShowName && !string.IsNullOrEmpty(userName))
+                {
+                    <div class="user-name">@userName</div>
+                }
+                
+                @if (ShowEmail && !string.IsNullOrEmpty(userEmail))
+                {
+                    <div class="user-email">@userEmail</div>
+                }
+                
+                @if (ShowRole && !string.IsNullOrEmpty(userRole))
+                {
+                    <Badge Color="@GetRoleBadgeColor(userRole)" Class="user-role-badge">
+                        @GetRoleDisplayName(userRole)
+                    </Badge>
+                }
+                
+                @if (ShowPoints && userPoints > 0)
+                {
+                    <div class="user-points">
+                        <i class="fas fa-star text-warning me-1"></i>
+                        <span>@userPoints puntos</span>
+                    </div>
+                }
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        @if (ShowGuestMessage)
+        {
+            <div class="user-info guest @CssClass">
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <div class="user-details">
+                    <div class="user-name">Invitado</div>
+                </div>
+            </div>
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+<style>
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .user-avatar {
+        font-size: 2rem;
+        color: var(--bs-primary);
+    }
+
+    .user-info.guest .user-avatar {
+        color: var(--bs-secondary);
+    }
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .user-name {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: var(--bs-dark);
+    }
+
+    .user-email {
+        font-size: 0.85rem;
+        color: var(--bs-secondary);
+    }
+
+    .user-role-badge {
+        font-size: 0.75rem;
+        width: fit-content;
+    }
+
+    .user-points {
+        font-size: 0.85rem;
+        color: var(--bs-dark);
+        display: flex;
+        align-items: center;
+    }
+</style>
+
