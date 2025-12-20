@@ -1,0 +1,31 @@
+@* Navbar transparente para el Hero *@
+
+<nav class="navbar-hero">
+    <div class="navbar-container">
+        <div class="navbar-logo">
+            <a href="/" class="logo-link">
+                <i class="fas fa-cut"></i>
+                <span class="logo-text">Barbería Premium</span>
+            </a>
+        </div>
+
+        <div class="navbar-actions">
+            <Button Color="Color.Primary" 
+                    Outline="true"
+                    Clicked="OnReservarClicked"
+                    Class="navbar-btn">
+                <i class="fas fa-calendar-alt me-2"></i>
+                Reservar
+            </Button>
+            
+            <Button Color="Color.Secondary" 
+                    Outline="true"
+                    Clicked="HandleLoginClicked"
+                    Class="navbar-btn">
+                <i class="fas fa-user me-2"></i>
+                Login
+            </Button>
+        </div>
+    </div>
+</nav>
+

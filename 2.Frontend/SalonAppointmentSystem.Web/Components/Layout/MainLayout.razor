@@ -2,16 +2,8 @@
 
 <Blazorise.ThemeProvider Theme="@theme">
     <div class="page">
-        <div class="sidebar">
-            <NavMenu />
-        </div>
-
         <main>
-            <div class="top-row px-4">
-                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-            </div>
-
-            <article class="content px-4">
+            <article class="content">
                 @Body
             </article>
         </main>
@@ -29,15 +21,18 @@
     {
         ColorOptions = new()
         {
-            Primary = "#052767",
-            Secondary = "#3a0647"
+            Primary = "#D4AF37",
+            Secondary = "#E8D7B5"
         },
-        BarOptions = new()
+        BackgroundOptions = new()
         {
-            DarkColors = new()
-            {
-                BackgroundColor = "#052767"
-            }
+            Primary = "#0A0A0A",
+            Secondary = "#1E1E1E"
+        },
+        TextColorOptions = new()
+        {
+            Primary = "#FFFFFF",
+            Secondary = "#A0A0A0"
         }
     };
 }

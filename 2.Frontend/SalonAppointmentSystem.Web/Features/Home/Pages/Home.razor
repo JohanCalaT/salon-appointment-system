@@ -1,0 +1,27 @@
+@page "/"
+@rendermode InteractiveServer
+
+<PageTitle>Barbería Premium - Sistema de Citas</PageTitle>
+
+<div class="home-container @(ShowLoginPanel ? "split-mode" : "")">
+    <div class="hero-content @(ShowLoginPanel ? "shifted" : "")">
+        <Navbar OnLoginClicked="ToggleLoginPanel" />
+        
+        <div class="hero-center">
+            <h1 class="hero-title">Estilo Premium para Caballeros</h1>
+            <p class="hero-subtitle">Experimenta el arte del grooming de lujo</p>
+            <Button Color="Color.Primary" 
+                    Size="Size.Large" 
+                    Clicked="OnReservarClicked"
+                    Class="cta-button">
+                RESERVAR CITA
+            </Button>
+        </div>
+    </div>
+    
+    @if (ShowLoginPanel)
+    {
+        <LoginPanel OnClose="ToggleLoginPanel" />
+    }
+</div>
+

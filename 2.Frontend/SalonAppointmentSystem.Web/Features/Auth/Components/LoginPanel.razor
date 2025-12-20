@@ -1,0 +1,60 @@
+@* Panel lateral de Login - Estado 2 *@
+@rendermode InteractiveServer
+
+<div class="login-panel">
+    <div class="login-panel-header">
+        <h2 class="login-title">Iniciar Sesión</h2>
+        <Button Color="Color.Dark" 
+                Clicked="OnCloseClicked"
+                Class="close-button">
+            <i class="fas fa-times"></i>
+        </Button>
+    </div>
+
+    <div class="login-panel-body">
+        <p class="login-subtitle">Accede a tu cuenta para gestionar tus citas</p>
+
+        <Field>
+            <FieldLabel>Email</FieldLabel>
+            <TextEdit @bind-Text="email" 
+                      Placeholder="tu@email.com"
+                      Role="TextRole.Email">
+            </TextEdit>
+        </Field>
+
+        <Field>
+            <FieldLabel>Contraseña</FieldLabel>
+            <TextEdit @bind-Text="password" 
+                      Placeholder="••••••••"
+                      Role="TextRole.Password">
+            </TextEdit>
+        </Field>
+
+        <Field>
+            <Check TValue="bool" @bind-Checked="rememberMe">Recordarme</Check>
+        </Field>
+
+        <Button Color="Color.Primary" 
+                Block="true"
+                Clicked="OnLoginClicked"
+                Class="login-button">
+            <i class="fas fa-sign-in-alt me-2"></i>
+            Iniciar Sesión
+        </Button>
+
+        <div class="login-footer">
+            <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <Divider DividerType="DividerType.TextContent" Text="O" />
+
+        <Button Color="Color.Secondary" 
+                Outline="true"
+                Block="true"
+                Class="register-button">
+            <i class="fas fa-user-plus me-2"></i>
+            Crear Cuenta
+        </Button>
+    </div>
+</div>
+

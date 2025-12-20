@@ -1,0 +1,113 @@
+/* ===================================================================
+   ESTADO 1: HERO COMPLETO (100% viewport)
+   ESTADO 2: SPLIT SCREEN (60% Hero + 40% Login Panel)
+   =================================================================== */
+
+.home-container {
+    min-height: 100vh;
+    display: flex;
+    background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.7)),
+        url('/images/barberia_backgrounds_home.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: all 400ms ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ===================================================================
+   HERO CONTENT - Transición suave entre estados
+   =================================================================== */
+
+.hero-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    transition: all 400ms ease-in-out;
+    width: 100%;
+}
+
+/* Estado 2: Hero se reduce al 60% cuando aparece el panel de login */
+.hero-content.shifted {
+    flex: 0 0 60%;
+    width: 60%;
+}
+
+.hero-center {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    gap: 1rem;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #A0A0A0;
+    text-align: center;
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+
+.cta-button {
+    padding: 1.25rem 3rem !important;
+    font-size: 1.125rem !important;
+    font-weight: 600 !important;
+    border-radius: 12px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* ===================================================================
+   RESPONSIVE - MOBILE FIRST
+   =================================================================== */
+
+@media (max-width: 768px) {
+    /* En mobile, cuando se muestra el login, el hero desaparece */
+    .hero-content.shifted {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .cta-button {
+        padding: 1rem 2rem !important;
+        font-size: 1rem !important;
+    }
+
+    .hero-center {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.75rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+}
+

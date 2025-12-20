@@ -1,0 +1,122 @@
+/* ===================================================================
+   NAVBAR TRANSPARENTE - HERO
+   =================================================================== */
+
+.navbar-hero {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: transparent;
+    padding: 1.5rem 0;
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ===================================================================
+   LOGO
+   =================================================================== */
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--color-acento-primario);
+    font-size: 1.5rem;
+    font-weight: 700;
+    transition: var(--transition-smooth);
+}
+
+.logo-link:hover {
+    color: var(--color-acento-soft);
+    transform: translateY(-2px);
+}
+
+.logo-link i {
+    font-size: 1.75rem;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    letter-spacing: -0.01em;
+}
+
+/* ===================================================================
+   ACCIONES (BOTONES)
+   =================================================================== */
+
+.navbar-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.navbar-btn {
+    font-weight: 600 !important;
+    padding: 0.625rem 1.5rem !important;
+    border-radius: 8px !important;
+    transition: var(--transition-smooth) !important;
+    border-width: 2px !important;
+}
+
+.navbar-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+}
+
+/* ===================================================================
+   RESPONSIVE - MOBILE
+   =================================================================== */
+
+@media (max-width: 768px) {
+    .navbar-container {
+        padding: 0 1rem;
+    }
+
+    .logo-text {
+        display: none;
+    }
+
+    .logo-link i {
+        font-size: 1.5rem;
+    }
+
+    .navbar-btn {
+        padding: 0.5rem 1rem !important;
+        font-size: 0.875rem !important;
+    }
+
+    .navbar-btn i {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar-hero {
+        padding: 1rem 0;
+    }
+
+    .navbar-actions {
+        gap: 0.5rem;
+    }
+
+    .navbar-btn {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.8rem !important;
+    }
+}
+

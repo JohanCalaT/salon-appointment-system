@@ -1,0 +1,198 @@
+/* ===================================================================
+   LOGIN PANEL - ESTADO 2 (40% width en desktop, 100% en mobile)
+   =================================================================== */
+
+.login-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100vh;
+    background-color: var(--color-superficie);
+    box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    z-index: 200;
+    animation: slideInRight 400ms ease-in-out;
+}
+
+/* Animación de entrada desde la derecha */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ===================================================================
+   HEADER DEL PANEL
+   =================================================================== */
+
+.login-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.login-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-acento-primario);
+    margin: 0;
+}
+
+.close-button {
+    background: transparent !important;
+    border: none !important;
+    color: var(--color-texto-low) !important;
+    font-size: 1.5rem !important;
+    padding: 0.5rem !important;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px !important;
+}
+
+.close-button:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--color-texto-high) !important;
+    transform: rotate(90deg);
+}
+
+/* ===================================================================
+   BODY DEL PANEL
+   =================================================================== */
+
+.login-panel-body {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.login-subtitle {
+    color: var(--color-texto-low);
+    font-size: 0.95rem;
+    margin: 0 0 1rem 0;
+}
+
+/* ===================================================================
+   CAMPOS DEL FORMULARIO
+   =================================================================== */
+
+.login-panel-body ::deep .field {
+    margin-bottom: 0;
+}
+
+.login-panel-body ::deep .field-label {
+    color: var(--color-texto-high);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.login-panel-body ::deep .form-control {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-texto-high);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: var(--transition-smooth);
+}
+
+.login-panel-body ::deep .form-control:focus {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--color-acento-primario);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.login-panel-body ::deep .form-control::placeholder {
+    color: var(--color-texto-low);
+}
+
+/* ===================================================================
+   BOTONES
+   =================================================================== */
+
+.login-button {
+    margin-top: 0.5rem;
+    padding: 0.875rem 1.5rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+}
+
+.register-button {
+    padding: 0.875rem 1.5rem !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+}
+
+/* ===================================================================
+   FOOTER Y ENLACES
+   =================================================================== */
+
+.login-footer {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.forgot-password {
+    color: var(--color-acento-soft);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: var(--transition-smooth);
+}
+
+.forgot-password:hover {
+    color: var(--color-acento-primario);
+    text-decoration: underline;
+}
+
+/* ===================================================================
+   RESPONSIVE - MOBILE
+   =================================================================== */
+
+@media (max-width: 768px) {
+    .login-panel {
+        width: 100%;
+        box-shadow: none;
+    }
+
+    .login-panel-header {
+        padding: 1.5rem;
+    }
+
+    .login-title {
+        font-size: 1.5rem;
+    }
+
+    .login-panel-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-panel-header {
+        padding: 1rem;
+    }
+
+    .login-panel-body {
+        padding: 1rem;
+        gap: 1rem;
+    }
+}
+
