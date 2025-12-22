@@ -1,0 +1,74 @@
+@inherits LayoutComponentBase
+
+<Blazorise.ThemeProvider Theme="@theme">
+    <CascadingAuthenticationState>
+        <div class="admin-layout @(isMobileMenuOpen ? "mobile-menu-open" : "")">
+            <!-- Mobile Overlay -->
+            @if (isMobileMenuOpen)
+            {
+                <div class="mobile-overlay" @onclick="CloseMobileMenu"></div>
+            }
+
+            <!-- Sidebar -->
+            <AdminSidebar
+                IsMobileMenuOpen="@isMobileMenuOpen"
+                OnCloseMobileMenu="@CloseMobileMenu" />
+
+            <!-- Main Content Area -->
+            <div class="admin-main">
+                <!-- Header -->
+                <AdminHeader OnToggleMobileMenu="@ToggleMobileMenu" />
+
+                <!-- Page Content -->
+                <main class="admin-content">
+                    <div class="content-wrapper">
+                        @Body
+                    </div>
+                </main>
+
+                <!-- Footer -->
+                <AdminFooter />
+            </div>
+        </div>
+    </CascadingAuthenticationState>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+</Blazorise.ThemeProvider>
+
+@code {
+    private bool isMobileMenuOpen = false;
+
+    private readonly Theme theme = new()
+    {
+        ColorOptions = new()
+        {
+            Primary = "#D4AF37",
+            Secondary = "#E8D7B5"
+        },
+        BackgroundOptions = new()
+        {
+            Primary = "#0A0A0A",
+            Secondary = "#1E1E1E"
+        },
+        TextColorOptions = new()
+        {
+            Primary = "#FFFFFF",
+            Secondary = "#A0A0A0"
+        }
+    };
+
+    private void ToggleMobileMenu()
+    {
+        isMobileMenuOpen = !isMobileMenuOpen;
+    }
+
+    private void CloseMobileMenu()
+    {
+        isMobileMenuOpen = false;
+    }
+}
+

@@ -1,0 +1,63 @@
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthStateProvider
+
+<aside class="admin-sidebar @(IsMobileMenuOpen ? "mobile-open" : "")">
+    <!-- Sidebar Header con Logo -->
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <div class="logo-full">
+                <i class="fas fa-cut logo-icon"></i>
+                <span class="logo-text">BarberBooking</span>
+            </div>
+        </div>
+
+        <!-- Close Button (solo visible en móvil) -->
+        <button class="btn-close-mobile" @onclick="CloseMobileMenu" title="Cerrar menú">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Navigation Menu -->
+    <nav class="sidebar-nav">
+        <AuthorizeView>
+            <Authorized>
+                <DynamicMenu UserRole="@userRole" />
+            </Authorized>
+        </AuthorizeView>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+        <div class="sidebar-version">
+            <small class="text-muted">v1.0.0</small>
+        </div>
+    </div>
+</aside>
+
+@code {
+    [Parameter]
+    public bool IsMobileMenuOpen { get; set; }
+
+    [Parameter]
+    public EventCallback OnCloseMobileMenu { get; set; }
+
+    private string? userRole;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            userRole = user.FindFirst(AppClaimTypes.Role)?.Value;
+        }
+    }
+
+    private async Task CloseMobileMenu()
+    {
+        await OnCloseMobileMenu.InvokeAsync();
+    }
+}
+

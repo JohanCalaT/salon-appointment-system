@@ -1,0 +1,314 @@
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+<div class="dynamic-menu">
+    @foreach (var item in GetVisibleMenuItems())
+    {
+        @if (item.IsDivider)
+        {
+            <div class="menu-divider"></div>
+        }
+        else if (item.Children != null && item.Children.Any())
+        {
+            <!-- Menu Item with Children (Expandable) -->
+            <div class="menu-item-group">
+                <button class="menu-item @(IsActive(item.Path) ? "active" : "")"
+                        @onclick="() => ToggleSubmenu(item.Id)">
+                    <i class="@item.Icon menu-icon"></i>
+                    <span class="menu-label">@item.Label</span>
+                    <i class="fas fa-chevron-down submenu-arrow @(expandedMenus.Contains(item.Id) ? "expanded" : "")"></i>
+                </button>
+
+                @if (expandedMenus.Contains(item.Id))
+                {
+                    <div class="submenu">
+                        @foreach (var child in item.Children)
+                        {
+                            <a href="@child.Path" class="submenu-item @(IsActive(child.Path) ? "active" : "")">
+                                <i class="@child.Icon submenu-icon"></i>
+                                <span class="submenu-label">@child.Label</span>
+                            </a>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <!-- Simple Menu Item -->
+            <a href="@item.Path" class="menu-item @(IsActive(item.Path) ? "active" : "")">
+                <i class="@item.Icon menu-icon"></i>
+                <span class="menu-label">@item.Label</span>
+                @if (!string.IsNullOrEmpty(item.Badge))
+                {
+                    <span class="menu-badge">@item.Badge</span>
+                }
+            </a>
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string? UserRole { get; set; }
+
+    private HashSet<string> expandedMenus = new();
+
+    private void ToggleSubmenu(string menuId)
+    {
+        if (expandedMenus.Contains(menuId))
+        {
+            expandedMenus.Remove(menuId);
+        }
+        else
+        {
+            expandedMenus.Add(menuId);
+        }
+    }
+
+    private bool IsActive(string? path)
+    {
+        if (string.IsNullOrEmpty(path)) return false;
+        
+        var currentPath = Navigation.ToBaseRelativePath(Navigation.Uri);
+        return currentPath.Equals(path.TrimStart('/'), StringComparison.OrdinalIgnoreCase) ||
+               currentPath.StartsWith(path.TrimStart('/') + "/", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private List<MenuItem> GetVisibleMenuItems()
+    {
+        var allMenuItems = GetMenuConfiguration();
+        return allMenuItems.Where(item => HasPermission(item)).ToList();
+    }
+
+    private bool HasPermission(MenuItem item)
+    {
+        if (item.AllowedRoles == null || !item.AllowedRoles.Any())
+            return true;
+
+        return item.AllowedRoles.Contains(UserRole ?? "");
+    }
+
+    private List<MenuItem> GetMenuConfiguration()
+    {
+        var menuItems = new List<MenuItem>();
+
+        // Dashboard - Todos los roles autenticados
+        menuItems.Add(new MenuItem
+        {
+            Id = "dashboard",
+            Label = "Dashboard",
+            Icon = "fas fa-chart-line",
+            Path = "/dashboard",
+            AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero, AppRoles.Cliente }
+        });
+
+        // ADMIN: Usuarios
+        menuItems.Add(new MenuItem
+        {
+            Id = "usuarios",
+            Label = "Usuarios",
+            Icon = "fas fa-users",
+            AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero },
+            Children = new List<MenuItem>
+            {
+                new MenuItem
+                {
+                    Id = "usuarios-lista",
+                    Label = "Lista de Usuarios",
+                    Icon = "fas fa-list",
+                    Path = "/usuarios",
+                    AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero }
+                },
+                new MenuItem
+                {
+                    Id = "usuarios-crear",
+                    Label = "Crear Usuario",
+                    Icon = "fas fa-user-plus",
+                    Path = "/usuarios/crear",
+                    AllowedRoles = new[] { AppRoles.Admin }
+                }
+            }
+        });
+
+        // ADMIN: Estaciones
+        menuItems.Add(new MenuItem
+        {
+            Id = "estaciones",
+            Label = "Estaciones",
+            Icon = "fas fa-chair",
+            AllowedRoles = new[] { AppRoles.Admin },
+            Children = new List<MenuItem>
+            {
+                new MenuItem
+                {
+                    Id = "estaciones-lista",
+                    Label = "Lista de Estaciones",
+                    Icon = "fas fa-list",
+                    Path = "/estaciones",
+                    AllowedRoles = new[] { AppRoles.Admin }
+                },
+                new MenuItem
+                {
+                    Id = "estaciones-crear",
+                    Label = "Crear Estación",
+                    Icon = "fas fa-plus",
+                    Path = "/estaciones/crear",
+                    AllowedRoles = new[] { AppRoles.Admin }
+                }
+            }
+        });
+
+        // BARBERO: Mi Estación
+        menuItems.Add(new MenuItem
+        {
+            Id = "mi-estacion",
+            Label = "Mi Estación",
+            Icon = "fas fa-chair",
+            Path = "/mi-estacion",
+            AllowedRoles = new[] { AppRoles.Barbero }
+        });
+
+        // ADMIN + BARBERO: Servicios
+        menuItems.Add(new MenuItem
+        {
+            Id = "servicios",
+            Label = "Servicios",
+            Icon = "fas fa-cut",
+            AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero },
+            Children = new List<MenuItem>
+            {
+                new MenuItem
+                {
+                    Id = "servicios-lista",
+                    Label = "Lista de Servicios",
+                    Icon = "fas fa-list",
+                    Path = "/servicios",
+                    AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero }
+                },
+                new MenuItem
+                {
+                    Id = "servicios-crear",
+                    Label = "Crear Servicio",
+                    Icon = "fas fa-plus",
+                    Path = "/servicios/crear",
+                    AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero }
+                }
+            }
+        });
+
+        // ADMIN: Horarios
+        menuItems.Add(new MenuItem
+        {
+            Id = "horarios",
+            Label = "Horarios",
+            Icon = "fas fa-clock",
+            AllowedRoles = new[] { AppRoles.Admin },
+            Children = new List<MenuItem>
+            {
+                new MenuItem
+                {
+                    Id = "horarios-global",
+                    Label = "Horario Global",
+                    Icon = "fas fa-globe",
+                    Path = "/horarios/global",
+                    AllowedRoles = new[] { AppRoles.Admin }
+                },
+                new MenuItem
+                {
+                    Id = "horarios-estaciones",
+                    Label = "Horarios por Estación",
+                    Icon = "fas fa-chair",
+                    Path = "/horarios/estaciones",
+                    AllowedRoles = new[] { AppRoles.Admin }
+                }
+            }
+        });
+
+        // BARBERO: Mi Horario
+        menuItems.Add(new MenuItem
+        {
+            Id = "mi-horario",
+            Label = "Mi Horario",
+            Icon = "fas fa-clock",
+            Path = "/mi-horario",
+            AllowedRoles = new[] { AppRoles.Barbero }
+        });
+
+        // ADMIN: Todas las Reservas
+        menuItems.Add(new MenuItem
+        {
+            Id = "reservas-all",
+            Label = "Reservas",
+            Icon = "fas fa-calendar-alt",
+            Path = "/reservas",
+            AllowedRoles = new[] { AppRoles.Admin }
+        });
+
+        // BARBERO: Mi Agenda
+        menuItems.Add(new MenuItem
+        {
+            Id = "mi-agenda",
+            Label = "Mi Agenda",
+            Icon = "fas fa-calendar-check",
+            Path = "/mi-agenda",
+            AllowedRoles = new[] { AppRoles.Barbero }
+        });
+
+        // CLIENTE: Mis Reservas
+        menuItems.Add(new MenuItem
+        {
+            Id = "mis-reservas",
+            Label = "Mis Reservas",
+            Icon = "fas fa-calendar",
+            AllowedRoles = new[] { AppRoles.Cliente },
+            Children = new List<MenuItem>
+            {
+                new MenuItem
+                {
+                    Id = "mis-reservas-lista",
+                    Label = "Ver Mis Reservas",
+                    Icon = "fas fa-list",
+                    Path = "/mis-reservas",
+                    AllowedRoles = new[] { AppRoles.Cliente }
+                },
+                new MenuItem
+                {
+                    Id = "reservas-crear",
+                    Label = "Nueva Reserva",
+                    Icon = "fas fa-plus",
+                    Path = "/reservas/crear",
+                    AllowedRoles = new[] { AppRoles.Cliente }
+                }
+            }
+        });
+
+        // Divider
+        menuItems.Add(new MenuItem { Id = "divider-1", IsDivider = true });
+
+        // Configuración - Todos
+        menuItems.Add(new MenuItem
+        {
+            Id = "perfil",
+            Label = "Mi Perfil",
+            Icon = "fas fa-user-cog",
+            Path = "/perfil",
+            AllowedRoles = new[] { AppRoles.Admin, AppRoles.Barbero, AppRoles.Cliente }
+        });
+
+        return menuItems;
+    }
+
+    private class MenuItem
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Label { get; set; } = string.Empty;
+        public string Icon { get; set; } = string.Empty;
+        public string? Path { get; set; }
+        public string[]? AllowedRoles { get; set; }
+        public List<MenuItem>? Children { get; set; }
+        public string? Badge { get; set; }
+        public bool IsDivider { get; set; }
+    }
+}
+

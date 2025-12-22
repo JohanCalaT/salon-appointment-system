@@ -1,0 +1,167 @@
+/* ===================================================================
+   ADMIN SIDEBAR
+   =================================================================== */
+
+.admin-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 280px;
+    background: linear-gradient(180deg, var(--color-superficie) 0%, #151515 100%);
+    border-right: 1px solid rgba(212, 175, 55, 0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+    z-index: 200;
+    overflow-x: hidden;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    position: relative;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+}
+
+/* Logo Section */
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.logo-full {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+    color: var(--color-acento-primario);
+}
+
+.logo-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--color-texto-high);
+    white-space: nowrap;
+}
+
+.logo-mini {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-mini i {
+    font-size: 1.8rem;
+    color: var(--color-acento-primario);
+}
+
+/* Close Mobile Button (solo móvil) */
+.btn-close-mobile {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: var(--color-texto-high);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    width: 32px;
+    height: 32px;
+}
+
+.btn-close-mobile:hover {
+    background-color: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+/* Navigation */
+.sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem 0;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.3);
+    border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.5);
+}
+
+/* Footer */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
+    text-align: center;
+}
+
+.sidebar-version {
+    color: var(--color-texto-low);
+    font-size: 0.75rem;
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+
+/* Desktop & Tablet (≥ 768px) - Sidebar siempre visible */
+@media (min-width: 768px) {
+    .admin-sidebar {
+        width: 280px;
+        transform: translateX(0);
+    }
+
+    .btn-close-mobile {
+        display: none;
+    }
+}
+
+/* Mobile (< 768px) - Sidebar como overlay con hamburguesa */
+@media (max-width: 767px) {
+    .admin-sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        box-shadow: none;
+    }
+
+    /* Mostrar sidebar cuando mobile-open está activo */
+    .admin-sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-close-mobile {
+        display: flex;
+    }
+
+    .sidebar-header {
+        padding: 1rem;
+    }
+}
+

@@ -1,0 +1,85 @@
+@rendermode InteractiveServer
+@inject IAuthService AuthService
+@inject NavigationManager Navigation
+
+<header class="admin-header">
+    <div class="header-left">
+        <!-- Mobile Menu Toggle (solo visible en móvil) -->
+        <button class="btn-mobile-menu" @onclick="HandleToggleMobileMenu" title="Abrir Menú">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Breadcrumb / Page Title -->
+        <div class="header-breadcrumb">
+            <h1 class="page-title">@GetPageTitle()</h1>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <AuthorizeView>
+            <Authorized>
+                <!-- Notifications Button -->
+                <button class="btn-header-action" title="Notificaciones">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">3</span>
+                </button>
+
+                <!-- User Info Dropdown -->
+                <div class="header-user-section">
+                    <UserInfo ShowAvatar="true"
+                              ShowName="true"
+                              ShowEmail="false"
+                              ShowRole="true"
+                              ShowPoints="false"
+                              ShowGuestMessage="false"
+                              CssClass="header-user-info" />
+
+                    <LogoutButton ButtonText=""
+                                  ButtonColor="Color.Danger"
+                                  Outline="true"
+                                  ShowIcon="true"
+                                  CssClass="btn-logout-header"
+                                  RedirectUrl="/" />
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <Button Color="Color.Primary" Clicked="@(() => Navigation.NavigateTo("/"))">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Iniciar Sesión
+                </Button>
+            </NotAuthorized>
+        </AuthorizeView>
+    </div>
+</header>
+
+@code {
+    [Parameter]
+    public EventCallback OnToggleMobileMenu { get; set; }
+
+    private async Task HandleToggleMobileMenu()
+    {
+        await OnToggleMobileMenu.InvokeAsync();
+    }
+
+    private string GetPageTitle()
+    {
+        var path = Navigation.ToBaseRelativePath(Navigation.Uri);
+
+        return path switch
+        {
+            "" or "dashboard" => "Dashboard",
+            "usuarios" => "Gestión de Usuarios",
+            "estaciones" => "Gestión de Estaciones",
+            "servicios" => "Gestión de Servicios",
+            "horarios" => "Configuración de Horarios",
+            "reservas" => "Gestión de Reservas",
+            "mi-estacion" => "Mi Estación",
+            "mi-horario" => "Mi Horario",
+            "mi-agenda" => "Mi Agenda",
+            "mis-reservas" => "Mis Reservas",
+            "perfil" => "Mi Perfil",
+            _ => "Panel Administrativo"
+        };
+    }
+}
+

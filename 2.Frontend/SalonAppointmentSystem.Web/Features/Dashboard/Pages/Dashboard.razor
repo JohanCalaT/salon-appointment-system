@@ -1,5 +1,6 @@
 @page "/dashboard"
 @using SalonAppointmentSystem.Web.Constants
+@layout AdminLayout
 @rendermode InteractiveServer
 <PageTitle>Dashboard - Barbería Premium</PageTitle>
 
@@ -16,22 +17,7 @@
 }
 else if (isAuthorized)
 {
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h1 class="dashboard-title">
-            <i class="fas fa-tachometer-alt me-3"></i>
-            Panel de Control
-        </h1>
-        <div class="dashboard-user-info">
-            <UserInfo ShowAvatar="true" 
-                      ShowName="true" 
-                      ShowEmail="true" 
-                      ShowRole="true"
-                      ShowPoints="false" />
-        </div>
-    </div>
-
-    <div class="dashboard-content">
+<div class="dashboard-content">
         <AuthorizeView Roles="@AppRoles.Admin">
             <Authorized>
                 <Alert Color="Color.Info" Visible="true">
@@ -138,45 +124,4 @@ else if (isAuthorized)
             </Column>
         </Row>
     </div>
-</div>
-
-<style>
-    .dashboard-container {
-        padding: 2rem;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .dashboard-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-        padding-bottom: 1rem;
-        border-bottom: 2px solid var(--bs-primary);
-    }
-
-    .dashboard-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: var(--bs-dark);
-        margin: 0;
-    }
-
-    @@media (max-width: 768px) {
-        .dashboard-container {
-            padding: 1rem;
-        }
-
-        .dashboard-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .dashboard-title {
-            font-size: 1.5rem;
-        }
-    }
-</style>
 }

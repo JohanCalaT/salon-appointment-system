@@ -1,0 +1,135 @@
+/* ===================================================================
+   ADMIN HEADER
+   =================================================================== */
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background-color: var(--color-superficie);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    height: 70px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Mobile Menu Toggle Button (solo visible en móvil < 768px) */
+.btn-mobile-menu {
+    display: none; /* Oculto por defecto en desktop */
+    background: transparent;
+    border: none;
+    color: var(--color-texto-high);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-mobile-menu:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    color: var(--color-acento-primario);
+}
+
+/* Page Title */
+.header-breadcrumb {
+    display: flex;
+    align-items: center;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-texto-high);
+    margin: 0;
+}
+
+/* Header Actions */
+.btn-header-action {
+    position: relative;
+    background: transparent;
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    color: var(--color-texto-high);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-header-action:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    border-color: var(--color-acento-primario);
+    color: var(--color-acento-primario);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #dc3545;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.4rem;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+}
+
+/* User Section */
+.header-user-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 1rem;
+    border-left: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    /* Mostrar botón hamburguesa en móvil */
+    .btn-mobile-menu {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .admin-header {
+        padding: 1rem;
+    }
+
+    .page-title {
+        font-size: 1.2rem;
+    }
+
+    .header-user-section {
+        padding-left: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-title {
+        display: none;
+    }
+
+    .header-left {
+        gap: 0.5rem;
+    }
+}
+

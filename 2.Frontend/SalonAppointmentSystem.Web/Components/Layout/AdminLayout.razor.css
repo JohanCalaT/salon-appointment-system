@@ -1,0 +1,101 @@
+/* ===================================================================
+   ADMIN LAYOUT - ESTRUCTURA PRINCIPAL
+   =================================================================== */
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--color-fondo-base);
+}
+
+.admin-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 2rem;
+    background-color: var(--color-fondo-base);
+}
+
+.content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ===================================================================
+   MOBILE OVERLAY
+   =================================================================== */
+
+.mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    backdrop-filter: blur(2px);
+}
+
+/* ===================================================================
+   RESPONSIVE
+   =================================================================== */
+
+/* Desktop & Tablet (≥ 768px) - Sidebar siempre visible */
+@media (min-width: 768px) {
+    .admin-main {
+        margin-left: 280px;
+    }
+
+    .admin-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Mobile (< 768px) - Sidebar como overlay con hamburguesa */
+@media (max-width: 767px) {
+    .admin-main {
+        margin-left: 0 !important;
+    }
+
+    .admin-content {
+        padding: 1rem;
+    }
+
+    /* Mostrar overlay cuando el menú móvil está abierto */
+    .admin-layout.mobile-menu-open .mobile-overlay {
+        display: block;
+    }
+}
+
+/* ===================================================================
+   ERROR UI
+   =================================================================== */
+
+#blazor-error-ui {
+    background: #dc3545;
+    bottom: 0;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.3);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+    color: white;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
