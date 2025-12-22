@@ -4,12 +4,10 @@
             <NotAuthorized>
                 @if (context.User.Identity?.IsAuthenticated == true)
                 {
-                    @* Usuario autenticado pero sin permisos - Redirigir a Access Denied *@
                     <RedirectToAccessDenied />
                 }
                 else
                 {
-                    @* Usuario no autenticado - Redirigir a Home con ReturnUrl *@
                     <RedirectToLogin />
                 }
             </NotAuthorized>

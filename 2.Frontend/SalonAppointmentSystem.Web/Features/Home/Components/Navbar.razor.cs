@@ -4,36 +4,34 @@ namespace SalonAppointmentSystem.Web.Features.Home.Components;
 
 /// <summary>
 /// Navbar transparente para la página principal
-/// Comunica eventos al componente padre (Home) mediante EventCallback
 /// </summary>
 public partial class Navbar : ComponentBase
 {
+    #region Inyección de Dependencias
+
     [Inject]
     private NavigationManager NavigationManager { get; set; } = default!;
 
-    /// <summary>
-    /// EventCallback que se invoca cuando se hace clic en el botón "Login"
-    /// Permite comunicación con el componente padre (Home)
-    /// </summary>
+    #endregion
+
+    #region Parámetros
+
     [Parameter]
     public EventCallback OnLoginClicked { get; set; }
 
-    /// <summary>
-    /// Maneja el clic en el botón "Reservar"
-    /// </summary>
+    #endregion
+
+    #region Métodos
+
     private void OnReservarClicked()
     {
-        // TODO: Navegar a la página de reservas
-        Console.WriteLine("Navbar: Botón 'Reservar' clickeado");
+        NavigationManager.NavigateTo("/reservas");
     }
 
-    /// <summary>
-    /// Maneja el clic en el botón "Login" y notifica al padre
-    /// </summary>
     private async Task HandleLoginClicked()
     {
-        Console.WriteLine("Navbar: Botón 'Login' clickeado - Notificando al padre");
         await OnLoginClicked.InvokeAsync();
     }
-}
 
+    #endregion
+}

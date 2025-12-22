@@ -8,76 +8,52 @@ namespace SalonAppointmentSystem.Web.Features.Auth.Components;
 
 /// <summary>
 /// Componente para mostrar información del usuario autenticado
-/// Extrae datos del AuthenticationState y los muestra de forma personalizable
 /// </summary>
 public partial class UserInfo : ComponentBase
 {
-    // ===================================================================
-    // INYECCIÓN DE DEPENDENCIAS
-    // ===================================================================
+    #region Inyección de Dependencias
 
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] private IAuthService AuthService { get; set; } = default!;
     [Inject] private ILogger<UserInfo> Logger { get; set; } = default!;
 
-    // ===================================================================
-    // PARÁMETROS
-    // ===================================================================
+    #endregion
 
-    /// <summary>
-    /// Mostrar avatar del usuario
-    /// </summary>
+    #region Parámetros
+
     [Parameter]
     public bool ShowAvatar { get; set; } = true;
 
-    /// <summary>
-    /// Mostrar nombre del usuario
-    /// </summary>
     [Parameter]
     public bool ShowName { get; set; } = true;
 
-    /// <summary>
-    /// Mostrar email del usuario
-    /// </summary>
     [Parameter]
-    public bool ShowEmail { get; set; } = false;
+    public bool ShowEmail { get; set; }
 
-    /// <summary>
-    /// Mostrar rol del usuario
-    /// </summary>
     [Parameter]
     public bool ShowRole { get; set; } = true;
 
-    /// <summary>
-    /// Mostrar puntos acumulados
-    /// </summary>
     [Parameter]
-    public bool ShowPoints { get; set; } = false;
+    public bool ShowPoints { get; set; }
 
-    /// <summary>
-    /// Mostrar mensaje de invitado cuando no está autenticado
-    /// </summary>
     [Parameter]
     public bool ShowGuestMessage { get; set; } = true;
 
-    /// <summary>
-    /// Clases CSS adicionales
-    /// </summary>
     [Parameter]
     public string? CssClass { get; set; }
 
-    // ===================================================================
-    // ESTADO DEL COMPONENTE
-    // ===================================================================
+    #endregion
+
+    #region Estado del Componente
 
     private string? userName;
     private string? userEmail;
     private string? userRole;
     private int userPoints;
 
-    // ===================================================================
-    // CICLO DE VIDA
-    // ===================================================================
+    #endregion
+
+    #region Ciclo de Vida
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -88,13 +64,10 @@ public partial class UserInfo : ComponentBase
         }
     }
 
-    // ===================================================================
-    // MÉTODOS PRIVADOS
-    // ===================================================================
+    #endregion
 
-    /// <summary>
-    /// Carga la información del usuario desde el AuthenticationState
-    /// </summary>
+    #region Métodos Privados
+
     private async Task LoadUserInfoAsync()
     {
         try
@@ -104,7 +77,6 @@ public partial class UserInfo : ComponentBase
 
             if (user.Identity?.IsAuthenticated == true)
             {
-                // Obtener información del usuario desde el AuthService
                 var userInfo = await AuthService.GetCurrentUserInfoAsync();
 
                 if (userInfo != null)
@@ -116,13 +88,12 @@ public partial class UserInfo : ComponentBase
                 }
                 else
                 {
-                    // Fallback: extraer desde claims
-                    userName = user.FindFirst(AppClaimTypes.FullName)?.Value 
-                              ?? user.FindFirst(AppClaimTypes.Email)?.Value 
+                    userName = user.FindFirst(AppClaimTypes.FullName)?.Value
+                              ?? user.FindFirst(AppClaimTypes.Email)?.Value
                               ?? "Usuario";
                     userEmail = user.FindFirst(AppClaimTypes.Email)?.Value;
                     userRole = user.FindFirst(AppClaimTypes.Role)?.Value;
-                    
+
                     var pointsClaim = user.FindFirst(AppClaimTypes.Puntos)?.Value;
                     userPoints = int.TryParse(pointsClaim, out var points) ? points : 0;
                 }
@@ -136,9 +107,6 @@ public partial class UserInfo : ComponentBase
         }
     }
 
-    /// <summary>
-    /// Obtiene el color del badge según el rol
-    /// </summary>
     private Color GetRoleBadgeColor(string role)
     {
         return role switch
@@ -151,9 +119,6 @@ public partial class UserInfo : ComponentBase
         };
     }
 
-    /// <summary>
-    /// Obtiene el nombre de visualización del rol
-    /// </summary>
     private string GetRoleDisplayName(string role)
     {
         return role switch
@@ -165,5 +130,6 @@ public partial class UserInfo : ComponentBase
             _ => role
         };
     }
-}
 
+    #endregion
+}

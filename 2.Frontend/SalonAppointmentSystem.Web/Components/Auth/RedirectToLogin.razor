@@ -1,4 +1,3 @@
-@* Componente de redirección a Login con ReturnUrl *@
 @inject NavigationManager Navigation
 
 @code {
@@ -8,4 +7,3 @@
         Navigation.NavigateTo($"/?returnUrl={Uri.EscapeDataString(returnUrl)}");
     }
 }
-

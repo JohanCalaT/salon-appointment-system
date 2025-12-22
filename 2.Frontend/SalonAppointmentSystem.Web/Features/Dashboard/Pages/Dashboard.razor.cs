@@ -6,33 +6,30 @@ namespace SalonAppointmentSystem.Web.Features.Dashboard.Pages;
 
 /// <summary>
 /// Página de Dashboard protegida para Admin y Barbero
-/// Muestra estadísticas y acciones rápidas
 /// </summary>
 public partial class Dashboard : ComponentBase
 {
-    // ===================================================================
-    // INYECCIÓN DE DEPENDENCIAS
-    // ===================================================================
+    #region Inyección de Dependencias
 
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] private ILogger<Dashboard> Logger { get; set; } = default!;
 
-    // ===================================================================
-    // ESTADO DEL COMPONENTE
-    // ===================================================================
+    #endregion
 
-    private int citasHoy = 0;
-    private int clientesActivos = 0;
-    private decimal ingresosMes = 0;
+    #region Estado del Componente
+
+    private int citasHoy;
+    private int clientesActivos;
+    private decimal ingresosMes;
     private string? userRole;
     private bool isLoading = true;
-    private bool isAuthorized = false;
-    private bool hasRendered = false;
+    private bool isAuthorized;
+    private bool hasRendered;
 
-    // ===================================================================
-    // CICLO DE VIDA
-    // ===================================================================
+    #endregion
+
+    #region Ciclo de Vida
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -40,8 +37,6 @@ public partial class Dashboard : ComponentBase
         {
             hasRendered = true;
 
-            // Verificar autorización después del primer render
-            // Esto asegura que ProtectedSessionStorage esté disponible
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
 
@@ -56,7 +51,6 @@ public partial class Dashboard : ComponentBase
                 return;
             }
 
-            // Verificar que sea Admin o Barbero
             if (!user.IsInRole(AppRoles.Admin) && !user.IsInRole(AppRoles.Barbero))
             {
                 Logger.LogWarning("Usuario {UserId} sin permisos intentando acceder a Dashboard",
@@ -72,27 +66,20 @@ public partial class Dashboard : ComponentBase
         }
     }
 
-    // ===================================================================
-    // MÉTODOS PRIVADOS
-    // ===================================================================
+    #endregion
 
-    /// <summary>
-    /// Carga los datos del dashboard
-    /// Por ahora son datos de ejemplo, después se conectarán a la API
-    /// </summary>
+    #region Métodos Privados
+
     private async Task LoadDashboardDataAsync()
     {
         try
         {
-            // Obtener rol del usuario
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             var user = authState.User;
             userRole = user.FindFirst(AppClaimTypes.Role)?.Value;
 
             Logger.LogInformation("Cargando dashboard para usuario con rol: {Role}", userRole);
 
-            // TODO: Reemplazar con llamadas reales a la API
-            // Por ahora usamos datos de ejemplo
             citasHoy = 12;
             clientesActivos = 156;
             ingresosMes = 15750.50m;
@@ -106,14 +93,9 @@ public partial class Dashboard : ComponentBase
         }
     }
 
-    // ===================================================================
-    // MANEJADORES DE EVENTOS
-    // ===================================================================
-
     private void OnNuevaCitaClicked()
     {
         Logger.LogInformation("Navegando a nueva cita");
-        // TODO: Navegar a página de nueva cita cuando esté implementada
         Navigation.NavigateTo("/citas/nueva");
     }
 
@@ -126,15 +108,14 @@ public partial class Dashboard : ComponentBase
     private void OnGestionarUsuariosClicked()
     {
         Logger.LogInformation("Navegando a gestión de usuarios");
-        // TODO: Navegar a página de gestión de usuarios cuando esté implementada
         Navigation.NavigateTo("/admin/usuarios");
     }
 
     private void OnConfiguracionClicked()
     {
         Logger.LogInformation("Navegando a configuración");
-        // TODO: Navegar a página de configuración cuando esté implementada
         Navigation.NavigateTo("/admin/configuracion");
     }
-}
 
+    #endregion
+}

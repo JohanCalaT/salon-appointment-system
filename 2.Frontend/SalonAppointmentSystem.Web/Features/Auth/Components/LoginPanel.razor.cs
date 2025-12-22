@@ -8,53 +8,41 @@ using SalonAppointmentSystem.Web.Constants;
 namespace SalonAppointmentSystem.Web.Features.Auth.Components;
 
 /// <summary>
-/// Panel lateral de login que aparece en el Estado 2
-/// Ocupa el 40% del ancho en desktop, 100% en mobile
-/// Implementa autenticación real con JWT
+/// Panel lateral de login con autenticación JWT
 /// </summary>
 public partial class LoginPanel : ComponentBase
 {
-    // ===================================================================
-    // INYECCIÓN DE DEPENDENCIAS
-    // ===================================================================
+    #region Inyección de Dependencias
 
     [Inject] private IAuthService AuthService { get; set; } = default!;
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private ILogger<LoginPanel> Logger { get; set; } = default!;
 
-    // ===================================================================
-    // PARÁMETROS
-    // ===================================================================
+    #endregion
 
-    /// <summary>
-    /// Callback que se invoca cuando se cierra el panel
-    /// </summary>
+    #region Parámetros
+
     [Parameter]
     public EventCallback OnClose { get; set; }
 
-    /// <summary>
-    /// URL a la que redirigir después del login exitoso
-    /// Si no se especifica, se redirige según el rol del usuario
-    /// </summary>
     [Parameter]
     public string? ReturnUrl { get; set; }
 
-    // ===================================================================
-    // ESTADO DEL COMPONENTE
-    // ===================================================================
+    #endregion
+
+    #region Estado del Componente
 
     private LoginModel loginModel = new();
-    private bool isLoading = false;
-    private string? errorMessage = null;
+    private bool isLoading;
+    private string? errorMessage;
 
-    // ===================================================================
-    // CICLO DE VIDA
-    // ===================================================================
+    #endregion
+
+    #region Ciclo de Vida
 
     protected override async Task OnInitializedAsync()
     {
-        // Verificar si el usuario ya está autenticado
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
@@ -65,31 +53,25 @@ public partial class LoginPanel : ComponentBase
         }
     }
 
-    // ===================================================================
-    // MÉTODOS DE AUTENTICACIÓN
-    // ===================================================================
+    #endregion
 
-    /// <summary>
-    /// Maneja el submit del formulario de login
-    /// </summary>
+    #region Métodos de Autenticación
+
     private async Task OnLoginSubmitAsync()
     {
         try
         {
             isLoading = true;
             errorMessage = null;
-            StateHasChanged();
 
             Logger.LogInformation("Intentando login para: {Email}", loginModel.Email);
 
-            // Crear request de login
             var loginRequest = new LoginRequest
             {
                 Email = loginModel.Email,
                 Password = loginModel.Password
             };
 
-            // Llamar al servicio de autenticación
             var response = await AuthService.LoginAsync(loginRequest);
 
             if (!response.Success || string.IsNullOrEmpty(response.AccessToken))
@@ -99,19 +81,15 @@ public partial class LoginPanel : ComponentBase
                 return;
             }
 
-            Logger.LogInformation("Login exitoso para {Email}, Rol: {Role}",
-                loginModel.Email, response.User?.Rol);
+            Logger.LogInformation("Login exitoso para {Email}, Rol: {Role}", loginModel.Email, response.User?.Rol);
 
-            // Notificar al AuthenticationStateProvider que el usuario se autenticó
             if (AuthStateProvider is CustomAuthenticationStateProvider customProvider)
             {
                 customProvider.NotifyUserAuthentication();
             }
 
-            // Cerrar el panel de login
             await OnClose.InvokeAsync();
 
-            // Redirigir según el rol del usuario
             var authState = await AuthStateProvider.GetAuthenticationStateAsync();
             await RedirectAfterLogin(authState.User);
         }
@@ -123,23 +101,17 @@ public partial class LoginPanel : ComponentBase
         finally
         {
             isLoading = false;
-            StateHasChanged();
         }
     }
 
-    /// <summary>
-    /// Redirige al usuario según su rol después de un login exitoso
-    /// </summary>
     private async Task RedirectAfterLogin(System.Security.Claims.ClaimsPrincipal user)
     {
-        // Si hay ReturnUrl, redirigir ahí
         if (!string.IsNullOrEmpty(ReturnUrl))
         {
             Navigation.NavigateTo(ReturnUrl);
             return;
         }
 
-        // Redirigir según el rol
         if (user.IsInRole(AppRoles.Admin) || user.IsInRole(AppRoles.Barbero))
         {
             Logger.LogInformation("Redirigiendo a Dashboard");
@@ -152,7 +124,6 @@ public partial class LoginPanel : ComponentBase
         }
         else
         {
-            // Rol desconocido, ir a Home
             Logger.LogWarning("Rol desconocido, redirigiendo a Home");
             Navigation.NavigateTo(AppRoutes.Home);
         }
@@ -160,9 +131,6 @@ public partial class LoginPanel : ComponentBase
         await Task.CompletedTask;
     }
 
-    /// <summary>
-    /// Maneja el clic en el botón de cerrar (X)
-    /// </summary>
     private async Task OnCloseClicked()
     {
         if (!isLoading)
@@ -170,5 +138,6 @@ public partial class LoginPanel : ComponentBase
             await OnClose.InvokeAsync();
         }
     }
-}
 
+    #endregion
+}

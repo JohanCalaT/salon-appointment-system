@@ -26,9 +26,17 @@
 @using SalonAppointmentSystem.Web
 @using SalonAppointmentSystem.Web.Components
 @using SalonAppointmentSystem.Web.Services.Http
+@using SalonAppointmentSystem.Web.Services.Auth
+@using SalonAppointmentSystem.Web.Constants
+
+@* ===== AUTENTICACIÓN ===== *@
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using SalonAppointmentSystem.Shared.DTOs.Auth
 
 @* ===== FEATURES ===== *@
 @using SalonAppointmentSystem.Web.Features.Auth.Components
 @using SalonAppointmentSystem.Web.Features.Home.Components
 @using SalonAppointmentSystem.Web.Features.Home.Pages
-
+@using SalonAppointmentSystem.Web.Features.Dashboard.Pages
+@using SalonAppointmentSystem.Web.Features.Reservas.Pages

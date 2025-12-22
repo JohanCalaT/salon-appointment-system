@@ -6,31 +6,28 @@ namespace SalonAppointmentSystem.Web.Features.Reservas.Pages;
 
 /// <summary>
 /// Página de Reservas accesible para todos los usuarios
-/// Muestra mensaje de bienvenida diferente para usuarios autenticados e invitados
 /// </summary>
 public partial class Reservas : ComponentBase
 {
-    // ===================================================================
-    // INYECCIÓN DE DEPENDENCIAS
-    // ===================================================================
+    #region Inyección de Dependencias
 
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] private NavigationManager Navigation { get; set; } = default!;
     [Inject] private ILogger<Reservas> Logger { get; set; } = default!;
 
-    // ===================================================================
-    // ESTADO DEL COMPONENTE
-    // ===================================================================
+    #endregion
 
-    private bool isAuthenticated = false;
+    #region Estado del Componente
+
+    private bool isAuthenticated;
     private string? userName;
     private string? userRole;
     private bool isLoading = true;
-    private bool hasRendered = false;
+    private bool hasRendered;
 
-    // ===================================================================
-    // CICLO DE VIDA
-    // ===================================================================
+    #endregion
+
+    #region Ciclo de Vida
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -43,13 +40,10 @@ public partial class Reservas : ComponentBase
         }
     }
 
-    // ===================================================================
-    // MÉTODOS PRIVADOS
-    // ===================================================================
+    #endregion
 
-    /// <summary>
-    /// Carga la información del usuario si está autenticado
-    /// </summary>
+    #region Métodos Privados
+
     private async Task LoadUserInfoAsync()
     {
         try
@@ -61,12 +55,12 @@ public partial class Reservas : ComponentBase
 
             if (isAuthenticated)
             {
-                userName = user.FindFirst(AppClaimTypes.FullName)?.Value 
-                          ?? user.FindFirst(AppClaimTypes.Email)?.Value 
+                userName = user.FindFirst(AppClaimTypes.FullName)?.Value
+                          ?? user.FindFirst(AppClaimTypes.Email)?.Value
                           ?? "Usuario";
                 userRole = user.FindFirst(AppClaimTypes.Role)?.Value ?? "Usuario";
 
-                Logger.LogInformation("Usuario autenticado accediendo a Reservas: {UserName}, Rol: {Role}", 
+                Logger.LogInformation("Usuario autenticado accediendo a Reservas: {UserName}, Rol: {Role}",
                     userName, userRole);
             }
             else
@@ -80,30 +74,17 @@ public partial class Reservas : ComponentBase
         }
     }
 
-    // ===================================================================
-    // MANEJADORES DE EVENTOS
-    // ===================================================================
-
-    /// <summary>
-    /// Maneja el clic en el enlace de login
-    /// </summary>
     private void OnLoginClicked()
     {
         Logger.LogInformation("Invitado solicitando login desde Reservas");
-        // TODO: Abrir panel de login o navegar a página de login
-        // Por ahora navegamos a Home donde está el panel de login
         Navigation.NavigateTo($"{AppRoutes.Home}?showLogin=true");
     }
 
-    /// <summary>
-    /// Maneja el clic en el enlace de registro
-    /// </summary>
     private void OnRegisterClicked()
     {
         Logger.LogInformation("Invitado solicitando registro desde Reservas");
-        // TODO: Abrir panel de registro o navegar a página de registro
-        // Por ahora navegamos a Home
         Navigation.NavigateTo($"{AppRoutes.Home}?showRegister=true");
     }
-}
 
+    #endregion
+}
