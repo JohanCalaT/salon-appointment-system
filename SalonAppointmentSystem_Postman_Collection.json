@@ -1,0 +1,1173 @@
+{
+	"info": {
+		"_postman_id": "salon-appointment-system-api",
+		"name": "Salon Appointment System API",
+		"description": "Colección completa de endpoints para el Sistema de Citas de Salón\n\n**Roles:**\n- Admin: Acceso total\n- Barbero: Gestión de reservas y servicios\n- Cliente: Crear y gestionar sus reservas\n- Invitado: Acceso limitado sin autenticación\n\n**Base URL:** http://localhost:5484 (HTTP) o https://localhost:7322 (HTTPS)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{accessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5484",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "reservaId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "codigoReserva",
+			"value": "",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "🔐 Autenticación",
+			"item": [
+				{
+					"name": "Login - Admin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"        pm.collectionVariables.set('userId', response.data.userId);",
+									"        console.log('✅ Tokens guardados correctamente');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@salon.com\",\n  \"password\": \"Admin123!\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						},
+						"description": "Inicia sesión como administrador. Los tokens se guardan automáticamente."
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Barbero",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"        pm.collectionVariables.set('userId', response.data.userId);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"barbero@salon.com\",\n  \"password\": \"Barbero123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login - Cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"        pm.collectionVariables.set('userId', response.data.userId);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"cliente@example.com\",\n  \"password\": \"Cliente123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registro - Nuevo Cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"        pm.collectionVariables.set('userId', response.data.userId);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombreCompleto\": \"Juan Pérez\",\n  \"email\": \"juan.perez@example.com\",\n  \"password\": \"MiPassword123!\",\n  \"confirmPassword\": \"MiPassword123!\",\n  \"phoneNumber\": \"+34612345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "register"]
+						},
+						"description": "Registra un nuevo usuario como Cliente"
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    if (response.success && response.data) {",
+									"        pm.collectionVariables.set('accessToken', response.data.accessToken);",
+									"        pm.collectionVariables.set('refreshToken', response.data.refreshToken);",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/refresh-token",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "refresh-token"]
+						},
+						"description": "Renueva el access token usando el refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "logout"]
+						},
+						"description": "Cierra la sesión actual revocando el refresh token"
+					},
+					"response": []
+				},
+				{
+					"name": "Logout All",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/logout-all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "logout-all"]
+						},
+						"description": "Cierra todas las sesiones del usuario (requiere autenticación)"
+					},
+					"response": []
+				},
+				{
+					"name": "Me - Info Usuario Actual",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/me",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "me"]
+						},
+						"description": "Obtiene información del usuario autenticado actual"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "👥 Usuarios",
+			"item": [
+				{
+					"name": "Listar Usuarios (Paginado)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users?pageNumber=1&pageSize=10&searchTerm=&rol=&activo=true&sortBy=NombreCompleto&sortDescending=false",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users"],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "searchTerm",
+									"value": "",
+									"description": "Buscar por nombre o email"
+								},
+								{
+									"key": "rol",
+									"value": "",
+									"description": "Filtrar por rol: Admin, Barbero, Cliente"
+								},
+								{
+									"key": "activo",
+									"value": "true",
+									"description": "Filtrar por estado activo"
+								},
+								{
+									"key": "sortBy",
+									"value": "NombreCompleto",
+									"description": "Campo para ordenar"
+								},
+								{
+									"key": "sortDescending",
+									"value": "false"
+								}
+							]
+						},
+						"description": "Obtiene lista paginada de usuarios (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos los Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "all"]
+						},
+						"description": "Obtiene todos los usuarios sin paginación (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Usuario por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Obtiene un usuario específico por su ID (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"nuevo.barbero@salon.com\",\n  \"password\": \"Barbero123!\",\n  \"nombreCompleto\": \"Carlos Martínez\",\n  \"phoneNumber\": \"+34612345679\",\n  \"rol\": \"Barbero\",\n  \"estacionId\": 1,\n  \"activo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users"]
+						},
+						"description": "Crea un nuevo usuario (Solo Admin). Roles: Admin, Barbero, Cliente"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Usuario (PUT)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"barbero.actualizado@salon.com\",\n  \"nombreCompleto\": \"Carlos Martínez López\",\n  \"phoneNumber\": \"+34612345679\",\n  \"rol\": \"Barbero\",\n  \"estacionId\": 1,\n  \"puntosAcumulados\": 100,\n  \"activo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Actualiza completamente un usuario (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Usuario Parcial (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombreCompleto\": \"Carlos Martínez Actualizado\",\n  \"activo\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Actualiza parcialmente un usuario (Solo Admin). Solo se actualizan los campos enviados."
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/users/{{userId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "users", "{{userId}}"]
+						},
+						"description": "Elimina un usuario (Solo Admin)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "📅 Reservas",
+			"item": [
+				{
+					"name": "📖 Públicos (Sin Auth)",
+					"item": [
+						{
+							"name": "Slots Disponibles",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/slots-disponibles?fecha=2024-12-25&estacionId=1&servicioId=1",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "slots-disponibles"],
+									"query": [
+										{
+											"key": "fecha",
+											"value": "2024-12-25",
+											"description": "Fecha en formato YYYY-MM-DD"
+										},
+										{
+											"key": "estacionId",
+											"value": "1"
+										},
+										{
+											"key": "servicioId",
+											"value": "1"
+										}
+									]
+								},
+								"description": "Obtiene los slots de tiempo disponibles para una fecha, estación y servicio"
+							},
+							"response": []
+						},
+						{
+							"name": "Cita Rápida",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/cita-rapida?servicioId=1&estacionId=",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "cita-rapida"],
+									"query": [
+										{
+											"key": "servicioId",
+											"value": "1"
+										},
+										{
+											"key": "estacionId",
+											"value": "",
+											"description": "Opcional - Si no se especifica, busca en cualquier estación"
+										}
+									]
+								},
+								"description": "Obtiene la próxima cita disponible para un servicio"
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar Reserva por Código",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 200) {",
+											"    const response = pm.response.json();",
+											"    if (response.isSuccess && response.value) {",
+											"        pm.collectionVariables.set('reservaId', response.value.id);",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/buscar/{{codigoReserva}}",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "buscar", "{{codigoReserva}}"]
+								},
+								"description": "Busca una reserva por su código único (ej: RES-20241225-ABC123)"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "🔒 Autenticados",
+					"item": [
+						{
+							"name": "Crear Reserva",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"if (pm.response.code === 201) {",
+											"    const response = pm.response.json();",
+											"    if (response.isSuccess && response.value) {",
+											"        pm.collectionVariables.set('reservaId', response.value.id);",
+											"        pm.collectionVariables.set('codigoReserva', response.value.codigoReserva);",
+											"    }",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"estacionId\": 1,\n  \"servicioId\": 1,\n  \"fechaHora\": \"2024-12-25T10:00:00Z\",\n  \"nombreCliente\": \"Juan Pérez\",\n  \"emailCliente\": \"juan.perez@example.com\",\n  \"telefonoCliente\": \"+34612345678\",\n  \"tipoReserva\": 0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas"]
+								},
+								"description": "Crea una nueva reserva (requiere autenticación). TipoReserva: 0=Manual, 1=CitaRapida"
+							},
+							"response": []
+						},
+						{
+							"name": "Mis Reservas",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/mis-reservas?incluirCanceladas=false",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "mis-reservas"],
+									"query": [
+										{
+											"key": "incluirCanceladas",
+											"value": "false"
+										}
+									]
+								},
+								"description": "Obtiene las reservas del usuario autenticado"
+							},
+							"response": []
+						},
+						{
+							"name": "Cancelar Reserva",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"motivo\": \"No puedo asistir por motivos personales\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/{{reservaId}}/cancelar",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "{{reservaId}}", "cancelar"]
+								},
+								"description": "Cancela una reserva (cliente solo puede cancelar las suyas)"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "👨‍💼 Admin/Barbero",
+					"item": [
+						{
+							"name": "Mi Agenda",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/mi-agenda?fechaDesde=2024-12-20&fechaHasta=2024-12-31&incluirCanceladas=false",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "mi-agenda"],
+									"query": [
+										{
+											"key": "fechaDesde",
+											"value": "2024-12-20"
+										},
+										{
+											"key": "fechaHasta",
+											"value": "2024-12-31"
+										},
+										{
+											"key": "incluirCanceladas",
+											"value": "false"
+										}
+									]
+								},
+								"description": "Obtiene la agenda del barbero autenticado (Admin/Barbero)"
+							},
+							"response": []
+						},
+						{
+							"name": "Completar Reserva",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/{{reservaId}}/completar",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "{{reservaId}}", "completar"]
+								},
+								"description": "Marca una reserva como completada (Admin/Barbero)"
+							},
+							"response": []
+						},
+						{
+							"name": "Actualizar Reserva",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"fechaHora\": \"2024-12-25T11:00:00Z\",\n  \"estacionId\": 1,\n  \"nombreCliente\": \"Juan Pérez Actualizado\",\n  \"emailCliente\": \"juan.perez@example.com\",\n  \"telefonoCliente\": \"+34612345678\",\n  \"estado\": 0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/api/reservas/{{reservaId}}",
+									"host": ["{{baseUrl}}"],
+									"path": ["api", "reservas", "{{reservaId}}"]
+								},
+								"description": "Actualiza una reserva (Admin/Barbero). Estado: 0=Pendiente, 1=Confirmada, 2=Completada, 3=Cancelada"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "💇 Servicios",
+			"item": [
+				{
+					"name": "Listar Servicios (Paginado)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios?pageNumber=1&pageSize=10&searchTerm=&activo=true&sortBy=Orden&sortDescending=false",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios"],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "searchTerm",
+									"value": "",
+									"description": "Buscar por nombre o descripción"
+								},
+								{
+									"key": "activo",
+									"value": "true"
+								},
+								{
+									"key": "sortBy",
+									"value": "Orden"
+								},
+								{
+									"key": "sortDescending",
+									"value": "false"
+								}
+							]
+						},
+						"description": "Obtiene lista paginada de servicios (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todos los Servicios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios", "all"]
+						},
+						"description": "Obtiene todos los servicios sin paginación (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Servicios Activos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios/activos",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios", "activos"]
+						},
+						"description": "Obtiene solo los servicios activos (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Servicio por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios", "1"]
+						},
+						"description": "Obtiene un servicio específico por su ID (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Servicio",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Corte de Cabello Premium\",\n  \"descripcion\": \"Corte de cabello con lavado y peinado incluido\",\n  \"duracionMinutos\": 45,\n  \"precio\": 25.00,\n  \"puntosQueOtorga\": 10,\n  \"orden\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios"]
+						},
+						"description": "Crea un nuevo servicio (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Servicio (PUT)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Corte de Cabello Premium Actualizado\",\n  \"descripcion\": \"Corte de cabello con lavado, peinado y masaje capilar\",\n  \"duracionMinutos\": 60,\n  \"precio\": 30.00,\n  \"puntosQueOtorga\": 15,\n  \"activo\": true,\n  \"orden\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios", "1"]
+						},
+						"description": "Actualiza completamente un servicio (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Servicio Parcial (PATCH)",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"precio\": 28.00,\n  \"activo\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios", "1"]
+						},
+						"description": "Actualiza parcialmente un servicio (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Servicio",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/servicios/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "servicios", "1"]
+						},
+						"description": "Elimina un servicio (Admin y Barbero)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🪑 Estaciones",
+			"item": [
+				{
+					"name": "Listar Estaciones (Paginado)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones?pageNumber=1&pageSize=10&searchTerm=&barberoId=&activo=true&sortBy=Nombre&sortDescending=false",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones"],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "searchTerm",
+									"value": "",
+									"description": "Buscar por nombre"
+								},
+								{
+									"key": "barberoId",
+									"value": "",
+									"description": "Filtrar por barbero"
+								},
+								{
+									"key": "activo",
+									"value": "true"
+								},
+								{
+									"key": "sortBy",
+									"value": "Nombre"
+								},
+								{
+									"key": "sortDescending",
+									"value": "false"
+								}
+							]
+						},
+						"description": "Obtiene lista paginada de estaciones (Admin y Barbero). Barbero solo ve su estación."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Todas las Estaciones",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones/all",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones", "all"]
+						},
+						"description": "Obtiene todas las estaciones sin paginación (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Estaciones Activas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones/activas",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones", "activas"]
+						},
+						"description": "Obtiene solo las estaciones activas (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Estación por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones", "1"]
+						},
+						"description": "Obtiene una estación específica por su ID (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Estación",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Estación 3\",\n  \"descripcion\": \"Estación para servicios premium\",\n  \"barberoId\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones"]
+						},
+						"description": "Crea una nueva estación (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Estación",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Estación 3 Actualizada\",\n  \"descripcion\": \"Estación VIP con servicios premium\",\n  \"barberoId\": \"{{userId}}\",\n  \"activo\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones", "1"]
+						},
+						"description": "Actualiza una estación (Solo Admin)"
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Estación",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/estaciones/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "estaciones", "1"]
+						},
+						"description": "Elimina una estación (Solo Admin)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "🕐 Horarios",
+			"item": [
+				{
+					"name": "Obtener Horario de Estación",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/horarios/estacion/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "horarios", "estacion", "1"]
+						},
+						"description": "Obtiene el horario semanal de una estación (Admin y Barbero)"
+					},
+					"response": []
+				},
+				{
+					"name": "Configurar Horario de Estación",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"horarios\": [\n    {\n      \"diaSemana\": 1,\n      \"horaInicio\": \"09:00:00\",\n      \"horaFin\": \"18:00:00\",\n      \"activo\": true\n    },\n    {\n      \"diaSemana\": 2,\n      \"horaInicio\": \"09:00:00\",\n      \"horaFin\": \"18:00:00\",\n      \"activo\": true\n    },\n    {\n      \"diaSemana\": 3,\n      \"horaInicio\": \"09:00:00\",\n      \"horaFin\": \"18:00:00\",\n      \"activo\": true\n    },\n    {\n      \"diaSemana\": 4,\n      \"horaInicio\": \"09:00:00\",\n      \"horaFin\": \"18:00:00\",\n      \"activo\": true\n    },\n    {\n      \"diaSemana\": 5,\n      \"horaInicio\": \"09:00:00\",\n      \"horaFin\": \"18:00:00\",\n      \"activo\": true\n    },\n    {\n      \"diaSemana\": 6,\n      \"horaInicio\": \"10:00:00\",\n      \"horaFin\": \"14:00:00\",\n      \"activo\": true\n    },\n    {\n      \"diaSemana\": 0,\n      \"horaInicio\": \"00:00:00\",\n      \"horaFin\": \"00:00:00\",\n      \"activo\": false\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/horarios/estacion/1",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "horarios", "estacion", "1"]
+						},
+						"description": "Configura el horario semanal de una estación (Admin y Barbero). DiaSemana: 0=Domingo, 1=Lunes, ..., 6=Sábado"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ℹ️ Info",
+			"item": [
+				{
+					"name": "API Info",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/info",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "info"]
+						},
+						"description": "Obtiene información general de la API"
+					},
+					"response": []
+				},
+				{
+					"name": "Health Check",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["health"]
+						},
+						"description": "Verifica el estado de salud de la API"
+					},
+					"response": []
+				},
+				{
+					"name": "Swagger UI",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/",
+							"host": ["{{baseUrl}}"],
+							"path": [""]
+						},
+						"description": "Abre la documentación Swagger de la API"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
